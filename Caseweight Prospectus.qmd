@@ -14,38 +14,40 @@ author:
         region: ON
         country: Canada
         id: lu
-        role: 
-          - conceptualization
-          - writing
-          - investigation
-          - formal analysis
-  #- name: Michael Emond
-  #  affiliations:
- #     - ref: lu
- #   role:
- #     - supervision
+      - name: Laurentian University
+        department: Department of Mathematics & Computer Science
+        address:  
+        city: Sudbury
+        region: ON
+        country: Canada
+        id: lumsc
+  - name: Michael Emond
+    department: Department of Psychology
+    affiliations:
+      - ref: lu
+    role:
+      - supervision
   #    - editing
-  # - name: Luc Rousseau
-  #   affiliations:
-  #     - ref: lu
-  #   role:
+  - name: Luc Rousseau
+    affiliations:
+      - ref: lu
+    role:
   #     - supervision
   #     - editing
-  #     - advisory committee
-  # - name: Kalpdrum Passi
-  #   department: Department of Mathematics & Computer Science 
-  #   affiliations:
-  #     - ref: lu
-  #   role:
-  #     - supervision
+      - advisory committee
+  - name: Kalpdrum Passi
+    affiliations:
+       - ref: lumsc
+    role:
+       - supervision
   #     - editing
-  #     - advisory committee
-  # - name: Nicholas Schwabe
-  #   affiliations: Compass
-  #   role:
+       - advisory committee
+  - name: Nicholas Schwabe
+    affiliations: Compass
+    role:
   #     - conceptualization
   #     - editing
-  #     - advisory committee
+       - advisory committee
 author-note:
   status-changes: 
     affiliation-change: ~
