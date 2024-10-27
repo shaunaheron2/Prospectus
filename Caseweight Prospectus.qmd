@@ -1,0 +1,296 @@
+---
+title: "Beyond counting clients: Developing a measure of clinician workload with machine learning"
+shorttitle: "Short Title in Running Header"
+author:
+  - name: Shauna Heron
+    corresponding: true
+    orcid: 0000-0002-9262-6718
+    email: sheron@laurentian.ca
+    affiliations:
+      - name: Laurentian University
+        department: Department of Psychology
+        address:  
+        city: Sudbury
+        region: ON
+        country: Canada
+        id: lu
+        role: 
+          - conceptualization
+          - writing
+          - investigation
+          - formal analysis
+  #- name: Michael Emond
+  #  affiliations:
+ #     - ref: lu
+ #   role:
+ #     - supervision
+  #    - editing
+  # - name: Luc Rousseau
+  #   affiliations:
+  #     - ref: lu
+  #   role:
+  #     - supervision
+  #     - editing
+  #     - advisory committee
+  # - name: Kalpdrum Passi
+  #   department: Department of Mathematics & Computer Science 
+  #   affiliations:
+  #     - ref: lu
+  #   role:
+  #     - supervision
+  #     - editing
+  #     - advisory committee
+  # - name: Nicholas Schwabe
+  #   affiliations: Compass
+  #   role:
+  #     - conceptualization
+  #     - editing
+  #     - advisory committee
+author-note:
+  status-changes: 
+    affiliation-change: ~
+    deceased: ~
+  disclosures:
+    study-registration: ~
+    data-sharing: ~
+    related-report: ~
+    conflict-of-interest: " "
+    financial-support: ~
+    gratitude: ~
+    authorship-agreements: ~
+abstract: "As community-based child and youth mental health services (CYMH) face significant workforce challenges, alongside increased demand for service, the ability to anticipate and optimize the workload of staff is critical to providing high quality care that is both timely and fair in its resource allocation. Yet ongoing manual review of client records, necessary to fairly and efficiently manage clinician workload remains untenable in the face of the same workforce shortages. With this gap in mind, the goal of the current study is to evaluate the utility of leveraging electronic mental health records (EMHR) with machine learning models to anticipate and monitor the amount of work individual clients contribute to a provider's workload. Specific objectives include: (i) determining the best proxies for modeling client-related work (i.e., total direct hours versus weekly direct hours versus case acuity--low; medium and high); (ii) identifying the best features to predict client-related work from structured demographic, administrative and assessment EMHRs; (iii) comparing the predictive accuracy of several machine learning algorithms to predict workload proxies (i.e., regression and classification based models depending on the proxy); (iv) determining the potential for early and ongoing prediction of caseweight to inform case assignment and workload management."
+language: 
+  citation-last-author-separator: "&"
+floatsintext: true
+keywords: [workload, caseload, case management, data science, machine learning, organizational psychology]
+bibliography: bibliography.bib
+link-citations: true
+format:
+  apaquarto-html:
+    comments:
+      hypothesis: true
+  apaquarto-docx: default
+#  apaquarto-pdf: default
+#    documentmode: man
+---
+
+```{r}
+#| echo: false
+#| warning: false
+library(fontawesome)
+library(usethis)
+library(DiagrammeR)
+
+```
+
+Amidst growing demand for child and youth mental health services in Canada and beyond, human resource challenges have been identified as a significant area of concern [@childrensmentalhealthontario2022]. In Ontario, a 2020 survey of community CYMH centres revealed that 83% of agencies reported staffing shortages–59% of them direct-service, clinical roles (i.e., psychologists, psychotherapists, and social workers)--which is a concern, as without an adequate workforce, children, youth and their families experience longer wait times and gaps in service that impact access to treatment [@childrensmentalhealthontario2022]. Illustratively, the same CMHO survey reported that 28,000 children and youth in Ontario were waiting up to 2.5 years for mental health services [@cmho2019; @cmho2020; @cymhlac2019], some even "aging out" of the system before they are off the wait list. With over 70% of mental health and addiction problems starting before age seventeen, this is a problem. Not only is a critical opportunity for early intervention missed, but individual and family stress related to mental health challenges are compounded, increasing the burden to a public health care system, where in Ontario, hospitalization of youth with mental health and addictions issues are up by an estimated 90% [@cmho2020; @cymhlac2019]. At the same time, when demand outpaces staffing, existing providers are having to manage higher client volumes containing more complex cases, perpetuating a cycle of provider burnout, absenteeism and high turnover. For this reason, developing a way to anticipate and monitor the contribution of individual cases to the overall work of providers is critical to improving client outcomes and minimizing provider burnout.
+
+According to the most recent Auditor General’s Report on Child and Youth Mental Health, a central problem that impedes the ability of agencies to efficiently meet this challenge, is determining reasonable provider to client workload ratios that reflect the varying needs and intervention levels required by different clients [@cmho2019]. Typically, the most common metric used for estimating provider workload in community based settings are case counts, with the type of service coming in second (i.e., brief services versus counselling and therapy) [@cmho2019]. Case counts are typically used to determine how many new clients a provider has room for in their overall caseload and signal when a provider has reached their capacity [@cmho2019]. For example, an agency might set a target of 20 cases per provider for counselling and therapy services; meaning that providers *without* 20 cases, theoretically have room for more. In practice, the number of cases in a provider's caseload should *decrease* as the complexity of individual cases within increase. However, the resources needed to manually evaluate and monitor the changing complexity and intensity of each case's needs are beyond what most public agencies can provide [@cmho2019]. As a result, cases are most often assigned in a way that assumes that each case represents a similar amount of work.
+
+In busy publicly funded CYMH agencies, manual review of a high volume of digital case files across hundreds of clients to make proactive care decisions is impractical, unsustainable and error-prone. Given this state of affairs, if there was a way to anticipate and monitor the work associated with a given case without requiring dedicated staff, agencies might more efficiently manage provider work. Research has already demonstrated the feasibility of predicting events associated with a wide range of healthcare problems, including hospital readmission and in-hospital death. However, the mental health literature is mostly limited to predicting specific types of events like risk of suicide, self-harm or onset of first psychosis–rather than predicting the overall resource needs associated with each case. Ultimately, much remains unknown about the feasibility of leveraging machine learning (ML) models to estimate work based on client-level factors. Moreover, even a highly accurate predictive model can't guarantee improved mental health outcomes or long-term cost savings; therefore, it remains unclear whether new predictive technologies could provide tools that are useful to mental healthcare practitioners.
+
+With this gap in mind, the current research proposes to explore the feasability of predicting the work associated with a given case at different points along the client timeline and examine whether such predictions could provide added value to clinical practice. The assumption underlying the research, is that there are historical patterns that predict future mental health resource use and that such patterns can be identified in electronic mental health records (EMHR), despite its sparseness, noise, errors and systematic bias.
+
+### Literature Review
+
+To date, the main strategy employed to determine provider workload based on client characteristics in CYMH relies on case-mix methodology borrowed from the medical domain [@tran2019; @johnson1998]. Case-mix classification systems are used in the health care sector to help payers and agencies monitor cost by categorizing clients based on their expected resource use. Casemix algorithms assume that though the needs of an individual will be unique, there are shared characteristics that determine the type and intensity of treatment needed (e.g., family counselling versus crisis intervention). Typically these systems are informed by information contained in case records. At the agency level, case records contain a variety of information, including provider-level information such as the number of direct and indirect-hours attributable to individual clients, as well as client-level characteristics like diagnoses, treatment history, referral source and presenting symptoms (e.g., crisis intervention versus brief services).
+
+Case-mix algorithms usually take one of two approaches to classification based on the expected work associated with features contained a patient's health record [@cmho2019]. Grouping systems assign people to classes in terms of their expected resource use, with each group having a specific weight attached to it (e.g., time-intensive treatment versus brief treatment) relative to the average case in the population. Often agencies rely on rudimentary case-mix algorithms to classify cases based on simple factors like age or program accessed. For example, a client accessing long-term counselling and therapy services may have a different weight attached in terms of expected resource use compared to a client accessing a one-session brief service. Index systems on the other hand, combine different case characteristics to provide a continuous, numerical value which maps to expected resource use [@tran2019].
+
+While case-mix systems are widely used in the medical domain, to date, most mental health case-mix classification systems focus on acute care in hospital or other inpatient settings which are distinctly different than community based care in several ways [@tran2019]. Typically, community based care offers a wider range of services. From brief services to longer-term treatment like counselling and therapy as well as group programs, school-based treatment as well as crisis intervention offered in partnership with local hospitals. Unlike many inpatient settings, services provided in community settings often lack clear diagnoses and recovery timelines making them more complicated to model. For instance, a medical emergency like a broken arm has a predictable recovery window, treatment protocol and thereby cost associated, unlike the subjective experience of anxiety or depression where the time and effort needed to recover is less black and white.
+
+The difficulty of modeling EMHR in the CYMH domain, is illustrated by the fact that only a handful of studies have looked at solving this problem, despite urgent need. Indeed, a 2019 scoping review of casemix literature in community-based mental health care domains found only a single case that looked at case-mix classification to predict mental health care resource [@tran2019; @martin2020]. In that study, researchers modeled 4573 client records from eleven UK outpatient CYMH agencies, comparing cluster analysis, regression trees and a conceptual classification based on clinical best practice guidelines to predict the number of appointments a client attended in treatment [@martin2020]. The researchers found that data-driven classification was no more clinically meaningful than conceptual classification in accounting for number of appointments; moreover, there was little evidence to support the idea that either client complexity or context factors (with the exception of school attendance problems) were linked to overall appointment counts [@martin2020]. Moveover, the models failed to explain significant variation in resource provision between workers despite clients exhibiting similar characteristics. Data quality problems and omission of important individual-level factors were cited as potential points of failure but suggesting their results merited further testing and development.
+
+In a related cohort, a group of researchers tried to predict the work associated with client features at a community-based mental health centre for the elderly [@baillon2009]. Using an 8-item self-designed case weighting scale (CWS) researchers identified factors staff felt contributed to demand for time. A multiple regression model was used to assign different weightings to predictors based on the strength of its relationship with the outcome (an estimation of time spent on each client logged over a four-week period). The resulting coefficients were then added to a spreadsheet and used to predict the total time a client would utilize in a four-week period following the first appointment based on the 8 characteristics. Though the model was reported a success, accounting for 58% of the variance in time spent on client-related work, the sample consisted of only 87 cases leaving it unclear how accurate the model really was [@baillon2009; @mansournia2021]. Moreover, inter-rater and re-rater reliability results indicated that the assessment, whether from a client's self-report or a professional's clinical opinion, did not necessarily relate to the amount of time needed by clients [@baillon2009].
+
+### Machine learning, a novel approach to modeling case-mix
+
+Considering the challenges outlined by prior research in modeling the high-dimensional, sparse data characteristic of EMHRs, we next looked to a growing body of research leveraging machine learning algorithms to model electronic health data. Machine learning (ML) is a branch of artificial intelligence that uses statistical techniques that enable computers to learn patterns from data to make accurate predictions [@nielsen2016]. ML algorithms are particularly well-suited to modeling the complex, high-dimensional data found in EMHRs [@chen2023; @an2023]. Unlike traditional statistical methods that aim to *confirm* specific linear relationships, ML algorithms independently identify high-dimensional, non-linear patterns that provide the best *predictions*. In addition, ML methodologies contain many advanced techniques like regularization and cross-validation which can be used to optimize a model's ability to generalize well to unseen data [@chen2023], making this approach particularly suitable for our purposes [@chen2023; @an2023].
+
+Within the inpatient mental health domain, machine learning has mostly been used to predict specific future events like substance relapse, self-harm and suicide risk. However a recent study leveraged ML to build a model that *continuously* monitors patient records to predict crisis-relapse over a 28 day period [@garriga2022]. The winning XGBoost regression demonstrated good accuracy in distinguishing between cases who were likely and unlikely to experience a crisis in the next 28 days. Specifically, the model could correctly differentiate those at risk from those not at risk about 80% of the time. Morever, in post-hoc case study, healthcare professionals rated the predictions valuable for managing patient care in 64% of cases, helping them to prioritize patients more effectively and potentially prevent crises [@garriga2022]. Though the author's did not model the work directly as we hope to do, 'crisis-risk' served as a proxy for increased resource-demand which they hoped would help better anticipate demand to manage caseloads more efficiently.
+
+With @garriga2022 's study in mind, the current research proposes to explore the feasability of predicting the work associated with a given case at different points along the client timeline. The assumption underlying the research, is that there are historical patterns that predict future mental health resource use and that such patterns can be identified in electronic mental health records (EMHR), despite its sparseness, noise, errors and systematic bias. To test our assumptions, we will utilize a retrospective, deidentified dataset containing a cohort of youth and families that utilized CYMH services between 2019 and the end of 2023 in Ontario to predict client-related work.
+
+Though the current study will be largely exploratory in nature, the work will be guided by several hypotheses. First, given past research we suspect that predictions will be weakest at the earliest stages of the client journey when information in the EMHR is limited to only an intake screener and basic demographic information, however, as information in the EMHR increases over time, we anticipate accuracy will increase. Furthermore, we anticipate that the best predictor of work for unseen clients will be mental health acuity features known to be linked to resource-use such as externalizing behaviours and prior self-harm or suicide attempts, but anticipate the best predictor of work for known clients will be time-based features such as time since first agency contact or time since last assessment. This hypothesis stems from existing literature indicating that these variables are critical drivers of resource use [@perlman2013; @tran2019].
+
+# Methodology
+
+To this end, we propose to build and evaluate a mental health caseweight model reliant on EMHR data. Considering we want to predict resource use at several stages in the client journey (i.e., beginning, middle and end), only cases with a completed initial screener will be included in the analysis. Final counts after screening will be reported and added to the flowchart before analysis.
+
+The study will be conducted at Compass Child and Youth Family Services which is the largest CYMH agency in northern Ontario, serving a culturally and socially diverse population of children, youth and families of over 6000 clients. The study will utilize a retrospective dataset containing deidentified cases with completed intake assessments who were active between January 1, 2019 and December 31, 2023. The general flow of clients through Compass is illustrated in @fig-client-selection.
+
+## Data Security
+
+Given the sensitivity of mental health data, ensuring data privacy and security by obtaining the necessary ethical approvals and maintaining transparency throughout the research process, will be strictly enforced. The necessary approvals from relevant ethics boards will be obtained. An exemption must be granted by both the agency (Compass) and Laurentian's institutional review board for the use of de-identified data.
+
+De-identified clinical data will be acquired from an electronic health information system belonging to Compass. The EHR database is maintained by the institution. Data will be de-identified at extraction using the Health Insurance Portability and Accountability Act Safe Harbor Method [@rightsocr2012]. This means that names, addresses, birthdates, postal codes and any other directly identifying information will be stripped from the dataset before any analysis begins. As an added precaution, unique client identification codes will be encrypted with a hashing system that makes it near impossible to reverse engineer the code to obtain original IDs. Furthermore, the data will not leave the custody of Compass and will only be analyzed by the principal researcher within a password-protected machine belonging to Compass.
+
+The reporting of model results, summary statistics and other visualizations will only include metrics associated with the performance of predictors and the models themselves, never individual scores or any other identifying information that could be linked to clients or smaller subgroups of clients. Furthermore, the researchers will seek approval from Compass before results are shared or utilized in any report or presentation.
+
+## Dataset
+
+The de-identified data will include approximately 6000 records containing demographics information, referrals, diagnoses, risk and well-being assessments and crisis events for all outpatients. Cases outside of the ages of 5 and 17 years will be excluded. Intake assessments without subsequent treatment will be excluded from the dataset as detecting events that correspond to increased resource use correspond to different ground truths. There are no plans to exclude cases based on any other feature, including diagnoses, however if this changes for whatever reason they will be outlined in the documentation. For the remaining patients, predictions were queried and evaluated for the period following the first assessment before querying the model.
+
+## Procedure
+
+The following steps outline the proposed process which will consist of four phases: 1) data collection, preprocessing and exploration; 2) identifying a list of workload proxies (output/dependent variables) that could be used as stand-ins for actual workload; 3) identifying and extracting indicators of workload (i.e.,independent variables/features) that could be used to model our proxies; 3) modeling the relationship between the indicators and proxies with algorithms of varying complexity; and 4) evaluating and comparing the models' performance on a set of unseen data (see @fig-procedure-flow).
+
+### Data Collection & Preprocessing
+
+After deidentification, data preprocessing will involve cleaning, joining dataframes, handling missing values if necessary, and aggregating features in monthly narrowing items to only information available at intake. All decisions we make in regard to missing data, data normalization or any other changes will be decided on a case by case basis and reported in our final paper. Moreover, the final report will include any Python code necessary to replicate these steps. Pending approval, the data scripts will also be made publicly available.
+
+## Features and target generation
+
+With the exception of static information like presenting concern or referral source, all EMHR data will include the associated date and time. The date and time refer to the moment when the specific event or assessment occurred—that is, the date and time that a client contacted compass or completed an assessment. To prepare the data for the modeling task, each client's case records will be consolidated at a weekly level according to the date associated with the record. Following this process, we will generate evenly spaced time series for each client spanning from their first interaction with Compass to the study’s final week. The features and labels generated for each week will be computed using the data from dates prior to that week. Static data that is susceptible to change over time (for example, postal code or school board information) will be removed to mitigate the risk of retrospective leakage.
+
+***Label generation.*** To construct a continuous case-weight prediction target, the sum of client-related direct and indirect hours logged by clinicians and associated with a specific program and client, will be aggregated at the same weekly level as the features, based on the time recorded by the worker prior to that week. We also intend to examine which measure of client-related time is most stable and reliable over time both direct and indirect time or either on its own.
+
+***Features generation.*** We will extract features from a total possible feature set of \_\_\_ features. Informed by @garriga2022, extraction will be performed according to six procedures:
+
+-   Static or semi-static features. demographics data will be represented as constant values attributed to each se with age treated as a special case that changes each year.
+
+-   Diagnosis feature. Client will be assigned their latest valid diagnosed disorder or developmental disability or an 'un-diagnosed' label and then seperated into diagnostic groups according to the latest valid diagnosed disorder at the last week of the training set to avoid leakage into the validation and test sets. Any codes created will be added to the final paper.
+
+-   EMHR weekly aggregations. Records related to client-agency interactions will be aggregated on a weekly basis for each client. The resulting features will constitute counts per type of interaction, one-hot encoded according to their categorization. If a specific type of event did not occur in a given week a value of 0 will be assigned to the feature related to the corresponding type of event for the corresponding week.
+
+-   Time-elapsed features. At each client-week, for each type of interaction and category, we will construct a feature that counts the number of elapsed weeks since the last occurence of the corresponding event. If the client never experienced such an event type up to that point in time, an NA value will be used.
+
+-   Last crisis episode descriptors. For each crisis episode, a set of descriptors will be used to build feature for the subsequent weeks until the next crisis events occurs. If the client never had a crisis event up until that point in time, NA values will be used.
+
+-   Last assessment descriptors. For each assessment item, a set of descriptors will be used to build a feature for the subsequent weeks until the next assessment occurs. All clients will have at least one assessment to be included in the study.
+
+-   Status features. For specific records, characterized by a start and end date, features for the corresponding weeks will be built by assigning their corresponding value (or category); otherwise they are set to Na.
+
+In addition to record-based features, we will also add the week number (of a year 1-52) to account for seasonality effects.
+
+Caseweight prediction modeling and evaluation. The caseweight prediction task will be defined as a continuous regression problem to be performed on a weekly basis. For each week, the model will predict the weekly hours needed during the upcoming 28 days. Applying a rolling window approach will allow for a periodic update of the caseweight by incorporating newly available data (or the absence of it) at the beginning of each week. The approach is common in settings where predictions are to be used in real time and when data are continuously updated. In addition we will define a classification task for each client, predicting low, moderate or high resource use the following week.
+
+### Data Splitting
+
+To maximize the generalizability of our models, we will apply a time-based 80/10/10 training/validation/test split:
+
+Training data will start in the first week of January 2019 and will end the last week of June 2022. Validation data will start in the first week of January 2023 and end in the last week of December 2023. Test data will start in the first week of January 2024 and end in the last week of December 2024.
+
+10-fold, timed based cross-validation will be used to tune the models. The cross-validation folds will be created with a portion of the training data, subdividing it into 10 subsets, or "folds," that will preserve the same time structure.
+
+Performance evaluations will be conducted on a weekly basis and each week's results will be used to build CIs on the evaluated metrics. All reported results will be computed using the test set if not otherwise indicated. (@fig-procedure-flow).
+
+The test set will act as a control group to evaluate the models' performance on "unseen data" at the very end of the training process. By keeping the test set separate and untouched during training, we ensure that our final evaluation provides a better estimation of how the models will perform in practice. This final step is crucial for assessing the models' generalizability and for identifying any overfitting that may have occurred during training.
+
+#### Independent Variables (features/indicators of work)
+
+Importantly, feature engineering–the creation of new predictors based on existing variables in the dataset–will occur *after* data splitting on the training data to minimize the risk of data leakage that could inadvertently occur when creating new variables from the full dataset [@sheetal2023].
+
+The main criterion for inclusion in the model will be the variable's availability in the electronic health record (EHR) system at intake. Features (variables) will include items and scales from the interRAI ChYMH Screener+. The interRAI ChYMH is a clinician-rated tool that is completed based on a semi-structured clinical interview and includes several scale scores, administrative items as well as other demographics information [@stewart2017].
+
+The ChYMH-S includes 34 administrative and tracking items, 26 mental health indicators, 5 substance use indicators, 9 questions related to harm to self and others, 6 behaviour focused items, 1 cognitive item as well as items that look to track social relations, anxiety levels, medications, living arrangements, diagnoses, physical conditions, past interventions and current and past strengths and resilience [@stewart2022]. The Depressive Severity Index, Anxiety Scale, Disruptive/Aggressive Behaviour Scale, Hyperactive/Distraction Scale and Internalizing/Externalizing scales are all included in the ChYMH-S. The instrument and the various scales and items it contains have been tested extensively in research worldwide, demonstrating reliable face, content, construct and predictive validity [@stewart2017; @stewart2022].
+
+A full list of all variables will be included in the final report.
+
+![Clinical pathway](images/client_pathway.svg){#fig-client-selection apa-note="Flow chart of client selection process. Clients who complete an intake assessment will be screened for inclusion. Only clients referred to Counselling and Therapy (CT) services will be included in the analysis. Predictions will include: client-related work at follow-up assessment and client-related work at end of treatment."}
+
+#### Targets (dependent variables or workload proxies)
+
+Informed by @wang2021, we propose to measure the influence of our workload indicators on i) length of service (weeks), ii) hours of time spent directly with the client or caregivers either in person on the phone or video call (direct time), iii) hours spent indirectly on client-related work like writing a treatment plan or filling out case notes (indirect time), iii) combined direct and iv) a case density score (caseweight) calculated by dividing the sum of direct and indirect time divided by the number of weeks the client spent in service (see @eq-caseweight). See @fig-caseweightmodel for a visualization of the relationship between variables.
+
+$$
+Caseweight = \frac{Hours Spent}{Weeks In Service}
+$$ {#eq-caseweight}
+
+![Modeling Caseweight--client-related work](images/predicting_caseweight.svg){#fig-caseweightmodel apa-note="Using indicators of client-related work (e.g. depression scores, anxiety scores, etc.) in the electronic health record (EHR)to predict workload proxies. Adapted from *Predictors of Workload*, by @wang2021."}
+
+ADD TABLE OF WORKLOAD PROXIES
+
+Outcome proxies will be modeled as a i) continuous index scores or a ii) classification grouping (low versus high). In practice, regression could be used to predict the number of hours a client might need per week across the episode of care, while the classification model will provide a quick flag for cases that are more high intensity than others.
+
+As a first step, we will train models on data collected over the entire program length to determine whether the indicators have any utility in modelling the workload proxies (some clients will have multiple assessments across the treatment period). Next, we will train on data *only* from the first assessment to predict workload captured at follow up assessment (typically 3 months later). This will allow us to test whether a workload prediction in the earliest stages of a visit is feasible. We believe this will be a more difficult task to accurately model, as such, a simple binary prediction of low versus high intensity may be easier for the models to accurately predict than a continuous index score.
+
+![Experimental procedure](images/experimental-modelling-procedure.svg){#fig-procedure-flow apa-note="Flowchart of the experimental procedure. Data will be split into training and test sets by client ID. The training set will be used to train the models using 10-fold group cross-validation, while the test set will act as a control group to evaluate the models' performance on unseen data."}
+
+### Model Selection
+
+We plan to utilize the following supervised machine-learning algorithms for both regression and classification problems: i) Random Forest (RF) for its ability to handle large datasets with high dimensionality; ii) XGBoost, known for its high performance and predictive accuracy on tabular datasets, iii) LASSO and Ridge regression for their ability to manage high multicollinearity, and finally iv) linear regression to serve as a baseline model for continuous outcomes and generalized logistic regression for binary outcomes. All algorithms will be trained on the same training set and cross validation folds and evaluated on the same test set using the TidyModels suite of packages in R Studio. These algorithms were chosen based on their success modeling similarly complex, tabular data types and may grow to include other models in the final paper [@salditt2023; @sheetal2023].
+
+### Validation and Testing
+
+Final models will be statistically compared and evaluated on the test set using the following performance metrics: i) Mean Absolute Error (MAE), and ii) Root Mean Squared Error (RMSE) for continues outcomes. For categorical outcomes, we will rely on accuracy and area under the curve (AUC). These evaluations will help determine the accuracy, generalizability and robustness of each model [@salditt2023; @wang2021] Final models will also be analyzed to identify which predictors were the most significant predictors of client-related workload using SHAP scores.
+
+### Software and Tools
+
+We will use R Statistical Software and the Tidyverse and TidyModels suite of packages for data manipulation and model building (R Core Team, 2024; Khun & Wickham 2020). This choice aligns with our familiarity with R and the study's specific requirements. R Quarto Markdown will be used for documentation and reproducibility. During the model building process, there is a chance we may use Python as well in the RStudio environment and will report and document this choice thoroughly if we do [@vanrossum1995].
+
+# Limitations and Challenges
+
+While our study aims to advance our understanding of client-related workload, several limitations should be acknowledged. First, our data is derived from a specific subset of the population—young people with mental health concerns in community outpatient settings—which may limit the generalizability of our findings to other demographics or healthcare settings. Additionally, although we are employing machine learning techniques to handle the complexity of electronic health data, these methods are not immune from biases present in the data itself. Systematic biases in the initial data collection process, such as under reporting, data entry errors or misclassification, could influence the model's predictions.
+
+Moreover, our reliance on electronic health records means that the quality and completeness of the data are contingent upon the accuracy and thoroughness of data entry made by providers. Missing data and inconsistencies are inherent challenges that could affect the robustness of our models. Moreover, many of the scale scores may be influenced by subjective interpretation of the provider who administered the assessment. While we will attempt to reduce these issues, there is no guarantee that all biases can be fully mitigated.
+
+Another limitation is the exclusion of provider-side variables from our models. While this decision is aimed at minimizing systemic unfairness, it also means that potentially valuable information about resource utilization influenced by provider characteristics is not considered. This could impact the comprehensiveness and accuracy of our workload predictions.
+
+Lastly, because our study focuses on modeling static, historical data, we won't capture dynamic changes in client needs that may impact resource use over time. More sophisticated real-time modeling techniques might be an interesting next step to explore how workload changes throughout the treatment period based on real-time changes in client need which might potentially providing a more dynamic picture of resource allocation and client needs.
+
+Finally, given the pressing need for a case-management tool that can more accurately and fairly assesses client-related work, we think our proposed study is a timely addition. Not only does our research have the potential to advance our understanding of the relationship between client characteristics and resource use, it contributes to the broader project of optimizing mental health services in a way that maximizes the chance that young people and their families receive high quality, timely care, while minimizing the risk of provider burnout.
+
+# References
+
+<!-- References will auto-populate in the refs div below -->
+
+::: {#refs}
+:::
+
+# Appendix
+
+ADD TABLES OF VARIABLES HERE
+
+```{r, include=FALSE}
+#| include: false
+#| eval: false
+In response to these challenges, the Ontario Ministry of Health and Long-Term Care (MOHLTC) has implemented several initiatives meant to increase the flow of young people through the system with the aim of reducing wait times. For example, same-day help can now be accessed in some communities through youth hubs, walk-in clinics and other rapid access programs and new intake processes have been implemented to identify those at highest risk faster [@cmho2020]. However, for those that don't meet the highest-risk threshold but still require intensive services, they will wait much longer than evidence suggests is best practice [@cmho2020].
+
+## Caseload versus workload
+
+In Ontario, between 16% and 24% of CYMH agencies reported average caseloads per worker that were at least 50% larger than provincial averages for the same services [@cmho2019], which is a problem since high caseloads (more than 20 to 30 clients) are associated with a range of negative outcomes for providers, their clients and the agencies they work for.
+High caseloads have been linked with self-reported burnout [@morse2012], poor work engagement, low job satisfaction [@green2014] and poorer treatment outcomes [@garman2002].
+Provider burnout, is characterized by emotional exhaustion, depersonalization and a decreased sense of self efficacy which impacts a providers perceived ability to handle job-related stressors [@kim2018].
+Provider burnout is particularly pronounced in community mental health settings where caseloads are typically larger and rates of clinical complexity and co-morbidity are higher [@tran2019].
+
+At the same time, newer research suggests the more important factor influencing client-related work may be the *mix* of cases rather than flat counts [@king2000].
+For instance, @king2000 found that counts were not as predictive of clinician burnout as the mix of cases.
+He posited that providers adapt to high caseloads by simply doing less for each case, suggesting a potential 'dose-response' relationship between a provider's time and their effectiveness which might explain the poorer outcomes associated with high caseloads [@king2009; @kim2018].
+To illustrate: two clinicians could have identical caseloads as far as counts but the amount of work necessary to deliver services could vary wildly between them.
+For example, one clinician may easily manage a higher number of low-complexity cases but become overwhelmed with just a few high-complexity cases.These findings are supported by the work o
+
+  Measuring workload: direct and indirect time
+
+  Despite initiatives such as the Quadruple Aim Framework meant to improve health outcomes, reduce costs, and improve provider work-life balance, the CYMH sector continues to face challenges in establishing a consistent, standardized measurement system, let alone a case assignment system that can accurately reflect the changing demands placed on staff [@arnetz2020; @cmho2019]. Nevertheless, the new guidelines have informed policies meant to improve the tracking of client-related work which has enabled several agencies to expand efforts to understand and track workload in their own organization.
+
+An important workload metric born out of Ontario's CYMH AG audits and the recommendations that followed, is time (direct and indirect) that is spent with each client–a metric that all publicly funded CYMH service providers in Ontario are now required to report [@mohcymh]. Direct-time is defined as the number of hours spent in face-to-face interactions, phone or video-based communications, and meetings with parents and caregivers, while indirect hours involve client-related tasks like documentation, travel time, and consultations. The sum of all direct and indirect hours logged by a clinician amounts to the overall "work" attributable to a given client. In our models, we will utilize direct and indirect hours to approximate the work attributed to an individual client. It is important to note that time is only a proxy for client-related work as it doesn't convey differences in the effort necessary to treat different clients, nor the stress associated with each case or even the workplace culture and supports that can influence the perceived workload experienced by the provider.
+
+One Ontario agency that has begun using the new metric to track and manage caseloads, is Compass, the lead child and youth mental health agency in the districts of Sudbury and Manitoulin and the proposed site of the current study. Compass utilizes an electronic dashboard to monitor caseloads and the associated direct and indirect time logged. While the dashboard has been useful for comparing case counts between clinicians and teams, it offers less insight into the amount of work associated with each case. Moreover, it doesn't help in assigning new cases beyond indicating which providers have higher or lower case counts than others. It does not allow administrators to evaluate the mix of cases (high to low needs) within each caseload, making it difficult to assign new clients in a way that is fair in terms of work. Based on requests from both leadership and clinicians themselves for an assignment tool that accounts for differences in the intensity of services needed, we began to wonder whether psychological screening data collected at intake might be modeled to quantify client complexity. If we could determine a weight for each case it might be easier to monitor existing caseloads as well as inform new case assignment.
+```
+
+### interRAI Child and Youth Mental Health Assessment Tool
+
+interRAI is an international research network that develops clinical standards across a variety of health and social service settings that have developed a large toolkit of instruments used by health organizations worldwide to assess people at the point of care across a variety of domains including emergency medicine, emergency psychiatry and children and youth mental health. The collected data are meant to be used at the agency level for quality improvement activities, benchmarking, program planning and resource planning and at the system level to compare health data across regions and provinces [@hirdes2002]. In Canada, interRAI is partnered with the Canadian Institute for Health Information (CIHI) who act as a custodian of interRAI standards and houses and monitors the collected interRAI data. Many interRAI instruments are used across Canada and internationally, but the Children and Youth Mental Health assessment (ChYMH) represents the first assessment designed specifically for children and youth [@stewart2017].
+
+In Ontario, two instruments are most often used in the CYMH sector: the Child and Youth Mental Health Screener+ (ChYMH-S) and the more comprehensive full ChYMH and its variants. The primary use of the CHYM-S is to support decision making related to triaging, placement, and service utilization while the full ChYMH and its associated Collaborative Action Plans (CAPs) are meant to assess, respond to and monitor the strengths, preferences and mental health needs of clients in in-patient and out-patient treatment. The ChYMH products are currently being utilized in over 60 mental health agencies across Ontario including Compass.
+
+The full ChYMH includes over 400 items that together are meant to build a comprehensive picture of a client's strengths, needs, functioning and areas of risk [@stewart2022], while the ChYMH-S is comprised of 106 items and is intended as a brief screener to identify young people who are in need of more comprehensive assessment. The screener is administered via a semi-structured interview to children and youth between 4-18 years in a variety of settings and is intended to take 15-20 minutes to complete. The current study will utilize screener data collected at intake to model client-related complexity and resulting work.
+
+Importantly, the ChYMH scales have demonstrated good predictive validity. For example, data from over 5000 children and youth placed in psychiatric settings in Ontario found that the Agressive Behaviour Scale was predictive of multiple control interventions, while the Severity of Self Harm Scale (SOS) was useful in predicting admission for risk of self-harm in youth between 10-17 years. In addition, individuals who score higher on scales like the Hyperactive/Distraction scale were more likely to have a provisional diagnosis of ADHD [@stewart2022].
+
+Though the various scales and items of the ChyMH demonstrate some predictive utility, it remains unclear how well these items might predict the actual work required to serve a given client. Within the CYMH domain we found one example of interRAI data being used to develop an algorithm to predict resource cost for children and youth with developmental disabilities with a cluster analysis [@stewart2020]. Though the resulting Child and Youth Resource Index (ChYRI) could only explain 30% of the variance in per diem costs for community-based services [@stewart2020], the algorithm was nonetheless deemed a success and is still in use today. However, a lack of explanation of how the analysis was conducted, as well as public availability of resulting fit statistics, makes it unclear how and where the algorithm could be improved.
+
+Moreover, unlike the goal of the ChYRI, we are not interested in predicting client-related service cost. Instead our efforts are driven by the need to reduce wait times and make client assignment fairer and mindful of the work that is already on each clinicians plate.
+
+The first examined the feasibility of utilizing ML algorithms to drive a visual representation of the work attributable to individual patients in a hospital setting [@benda2018]. The idea was to build a live, dynamic visualization that could be used to compare cases and workloads across clinicians to improve patient assignment. The display was driven by an algorithm that predicted patient-level work based on a combination of diagnoses and the number of orders or “events” (e.g., tests, phone calls, diagnoses) found in a patient's electronic health record [@benda2018]. Although clinicians evaluated the tool positively, the algorithm underlying the display was found to inadequately account for actual workload, suggesting more refinements were needed [@benda2018]. Building on @benda2018's study, @wang2021 focused on improving the dashboards underlying algorithm using several machine learning algorithms known for their robustness in modeling the sparse, heterogeneous data found in electronic health records. Both regression and classification algorithms were used to model several proxies for workload: i) overall length of stay, ii) number of events (e.g., tests ordered, medication administered), iii) density of events (count of events divided by length of stay) and iv) a binary outcome indicating high versus low demand patients. The accuracy of the model in predicting low versus high length of stay (LOS) was 70% with information from the first hour, 73% from the first two hours and 83% with data from the entire visit. Importantly, @wang2021 's work demonstrated the potential for machine learning techniques to predict client-related work from information collected at intake–which is what we are interested in doing and so resulted in the methodology we chose.
+
+In planning our own approach to modeling client-related work, we hope to address several problems and limitations that emerged in the literature. The first, which dictated our chosen machine learning (ML) methodology, relates to the complexities that arise from modeling electronic health data (EMH) where hidden clustering, non-independence of observations and multi-collinearity are all challenges that ML methods like random forests and gradient boosted forests can often better manage; albeit with varying levels of explainability [@zeleke2023; @chen2023; @an2023]. Though there is often a trade-off of interpretability with increased predictive accuracy, modern post-hoc methods like SHapley Additive exPlanations (SHAP) offer an alternative way of understanding the contribution of inidividual features to a specific prediction [@lundberg].
+
+We also intend to tackle the lack of inconsistent outcome measures found in the literature. Previous studies often relied on flat measures such as length of stay or number of appointments as a proxy for workload which doesn't capture the variance in work intensity throughout the treatment period [@cmho2019; @martin2020]. To address this, we will calculate a work measure on a per-diem basis, based on the total time logged in service of the client per week, which we hope will better reflect the intensity of work than a flat count [@wang2021; @cmho2019].
+
+Additionally, we intend to address concerns highlighted by @tran2019 where client-level indicators like gender and race are included in models and which raise concerns about fairness and predictor bias. @tran2019 importantly pointed out that while race and gender may *correlate* with resource use, the relationships are confounded by marginalization that may be drive increased risk for mental health concerns [@gaines2003; @tran2019]. To avoid these pitfalls, we will focus solely on client-side drivers of work, specifically the mental health acuity features collected at intake, which have been shown to be more reliable drivers of resource use [@perlman2013; @tran2019]. We plan to use interRAI screener+ items and scores specifically [@hirdes2020].
+
+Furthermore, we intend to focus solely on client-side drivers of work as recommended by @tran2019 who suggest including provider-side variables like years of experience or preferred therapeutic modality risks reinforcing systemic unfairness in case distribution where the more experienced clinicians may have the greater bulk of complex clients. Moreover, provider related information is not available in the client record at intake.
+
+Finally, to avoid considerable validation problems found across the literature, we will utilize cross-validation for model training and tuning and will hold back a test set of unseen data for final model evaluation. The test set we hold back will serve as a control for determining model generalizability [@tran2019; @costa2015; @reid2021]. We will also split our data in a group-wise fashion, ensuring that clients with multiple rows will only be in either the training set or the test set, never both. This will ensure that we have a more robust measure of how well the final model will generalize to "unseen" clients. We will also clearly outline our choice of models, metrics and all R code will be made available for reproducibility (see Methods).
