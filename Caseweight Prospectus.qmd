@@ -67,7 +67,6 @@ floatsintext: true
 keywords: [workload, caseload, case management, data science, machine learning, organizational psychology]
 bibliography: bibliography.bib
 link-citations: true
-lightbox: true
 format:
   apaquarto-html:
     comments:
@@ -82,11 +81,8 @@ format:
 #| warning: false
 library(fontawesome)
 library(usethis)
-library(DiagrammeR)
-library(reticulate)
 #
 ```
-
 
 Amidst growing demand for child and youth mental health services in Canada and beyond, human resource challenges have been identified as a significant area of concern [@childrensmentalhealthontario2022]. In Ontario, a 2020 survey of community CYMH centres revealed that 83% of agencies reported staffing shortages–59% of them direct-service, clinical roles (i.e., psychologists, psychotherapists, and social workers)--which is a concern, as without an adequate workforce, children, youth and their families experience longer wait times and gaps in service that impact access to treatment [@childrensmentalhealthontario2022]. Illustratively, the same CMHO survey reported that 28,000 children and youth in Ontario were waiting up to 2.5 years for mental health services [@cmho2019; @cmho2020; @cymhlac2019], some even "aging out" of the system before they are off the wait list. With over 70% of mental health and addiction problems starting before age seventeen, this is a problem. Not only is a critical opportunity for early intervention missed, but individual and family stress related to mental health challenges are compounded, increasing the burden to a public health care system, where in Ontario, hospitalization of youth with mental health and addictions issues are up by an estimated 90% [@cmho2020; @cymhlac2019]. At the same time, when demand outpaces staffing, existing providers are having to manage higher client volumes containing more complex cases, perpetuating a cycle of provider burnout, absenteeism and high turnover. For this reason, developing a way to anticipate and monitor the contribution of individual cases to the overall work of providers is critical to improving client outcomes and minimizing provider burnout.
 
@@ -101,6 +97,7 @@ With this gap in mind, the current research proposes to explore the feasability 
 To date, the main strategy employed to determine provider workload based on client characteristics in CYMH relies on case-mix methodology borrowed from the medical domain [@tran2019; @johnson1998]. Case-mix classification systems are used in the health care sector to help payers and agencies monitor cost by categorizing clients based on their expected resource use. Casemix algorithms assume that though the needs of an individual will be unique, there are shared characteristics that determine the type and intensity of treatment needed (e.g., family counselling versus crisis intervention). Typically these systems are informed by information contained in case records. At the agency level, case records contain a variety of information, including provider-level information such as the number of direct and indirect-hours attributable to individual clients, as well as client-level characteristics like diagnoses, treatment history, referral source and presenting symptoms (e.g., crisis intervention versus brief services).
 
 ```{dot}
+#| eval: false
 
 digraph expanded_flowchart {
   graph [layout = dot, rankdir = TB]
@@ -128,10 +125,10 @@ digraph expanded_flowchart {
 
 ```
 
-Case-mix algorithms usually take one of two approaches to classification based on the expected work associated with features contained a patient's health record [@cmho2019]. Grouping systems assign people to classes in terms of their expected resource use, with each group having a specific weight attached to it (e.g., time-intensive treatment versus brief treatment) relative to the average case in the population. Often agencies rely on rudimentary case-mix algorithms to classify cases based on simple factors like age or program accessed. For example, a client accessing long-term counselling and therapy services may have a different weight attached in terms of expected resource use compared to a client accessing a one-session brief service. Index systems on the other hand, combine different case characteristics to provide a continuous, numerical value which maps to expected resource use [@tran2019].
+Case-mix algorithms usually take one of two approaches to classification based on the expected work associated with features contained a patient's health record [@cmho2019]. Grouping systems assign people to classes in terms of their expected resource use, with each group having a specific weight attached to it (e.g., time-intensive treatment versus brief treatment) relative to the average case in the population. Often agencies rely on rudimentary case-mix algorithms to classify cases based on simple factors like age or program accessed. For example, a client accessing long-term counseling and therapy services may have a different weight attached in terms of expected resource use compared to a client accessing a one-session brief service. Index systems on the other hand, combine different case characteristics to provide a continuous, numerical value which maps to expected resource use [@tran2019].
 
 ```{dot}
-
+#| eval: false
 digraph g {
 
 fontname="Helvetica,Arial,sans-serif"
@@ -163,7 +160,10 @@ shape = "record"
 
 }
 ```
+
+
 ```{dot}
+#| eval: false
 digraph healthcare_flowchart {
   graph [layout = dot, rankdir = TB]
 
@@ -228,7 +228,6 @@ digraph healthcare_flowchart {
   HighRiskPatients -> PatientRoles;
 }
 ```
-
 
 While case-mix systems are widely used in the medical domain, to date, most mental health case-mix classification systems focus on acute care in hospital or other inpatient settings which are distinctly different than community based care in several ways [@tran2019]. Typically, community based care offers a wider range of services. From brief services to longer-term treatment like counselling and therapy as well as group programs, school-based treatment as well as crisis intervention offered in partnership with local hospitals. Unlike many inpatient settings, services provided in community settings often lack clear diagnoses and recovery timelines making them more complicated to model. For instance, a medical emergency like a broken arm has a predictable recovery window, treatment protocol and thereby cost associated, unlike the subjective experience of anxiety or depression where the time and effort needed to recover is less black and white.
 
