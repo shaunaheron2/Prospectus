@@ -1,0 +1,8 @@
+// Small Flowchart
+digraph {
+	A [label=Start color=lightblue shape=box style=filled]
+	B [label="Process Data" color=lightgreen shape=box style=filled]
+	C [label=End color=lightyellow shape=box style=filled]
+	A -> B
+	B -> C
+}
