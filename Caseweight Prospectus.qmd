@@ -96,35 +96,6 @@ With this gap in mind, the current research proposes to explore the feasability 
 
 To date, the main strategy employed to determine provider workload based on client characteristics in CYMH relies on case-mix methodology borrowed from the medical domain [@tran2019; @johnson1998]. Case-mix classification systems are used in the health care sector to help payers and agencies monitor cost by categorizing clients based on their expected resource use. Casemix algorithms assume that though the needs of an individual will be unique, there are shared characteristics that determine the type and intensity of treatment needed (e.g., family counselling versus crisis intervention). Typically these systems are informed by information contained in case records. At the agency level, case records contain a variety of information, including provider-level information such as the number of direct and indirect-hours attributable to individual clients, as well as client-level characteristics like diagnoses, treatment history, referral source and presenting symptoms (e.g., crisis intervention versus brief services).
 
-```{dot}
-#| eval: false
-
-digraph expanded_flowchart {
-  graph [layout = dot, rankdir = TB]
-
-  # Expanded flowchart nodes
-  node [shape = box, style = filled, fontsize = 10]
-  A [label = "Start", fillcolor = lightblue, style = filled]
-  B [label = "Collect Data", fillcolor = lightgreen, style = filled]
-  C [label = "Process Data", fillcolor = lightgreen, style = filled]
-  D [label = "Feature Engineering", fillcolor = lightcoral, style = filled]
-  E [label = "Train Model", fillcolor = lightsalmon, style = filled]
-  F [label = "Evaluate Model", fillcolor = lightyellow, style = filled]
-  G [label = "Deploy Model", fillcolor = lightcyan, style = filled]
-  H [label = "End", fillcolor = lightgrey, style = filled]
-
-  # Define edges to connect nodes
-  A -> B
-  B -> C
-  C -> D
-  D -> E
-  E -> F
-  F -> G
-  G -> H
-}
-
-```
-
 Case-mix algorithms usually take one of two approaches to classification based on the expected work associated with features contained a patient's health record [@cmho2019]. Grouping systems assign people to classes in terms of their expected resource use, with each group having a specific weight attached to it (e.g., time-intensive treatment versus brief treatment) relative to the average case in the population. Often agencies rely on rudimentary case-mix algorithms to classify cases based on simple factors like age or program accessed. For example, a client accessing long-term counseling and therapy services may have a different weight attached in terms of expected resource use compared to a client accessing a one-session brief service. Index systems on the other hand, combine different case characteristics to provide a continuous, numerical value which maps to expected resource use [@tran2019].
 
 ```{dot}
