@@ -60,7 +60,7 @@ author-note:
     financial-support: ~
     gratitude: ~
     authorship-agreements: ~
-abstract: "As community-based child and youth mental health services (CYMH) face significant workforce challenges, alongside increased demand for service, the ability to anticipate and optimize the workload of staff is critical to providing high quality care that is both timely and fair in its resource allocation. Yet ongoing manual review of client records, necessary to fairly and efficiently manage clinician workload remains untenable in the face of the same workforce shortages. With this gap in mind, the goal of the current study is to evaluate the utility of leveraging electronic mental health records (EMHR) with machine learning models to anticipate and monitor the amount of work individual clients contribute to a provider's workload. Specific objectives include: (i) determining the best proxies for modeling client-related work (i.e., total direct hours versus weekly direct hours versus case acuity--low; medium and high); (ii) identifying the best features to predict client-related work from structured demographic, administrative and assessment EMHRs; (iii) comparing the predictive accuracy of several machine learning algorithms to predict workload proxies (i.e., regression and classification based models depending on the proxy); (iv) determining the potential for early and ongoing prediction of caseweight to inform case assignment and workload management."
+abstract: "As community-based mental health services face increased demand for service, alongside significant workforce challenges, the ability to anticipate and optimize staff workload is critical to providing high quality care that is timely and fair in its allocation. Yet manual review of client records, necessary to fairly and efficiently manage clinician workload and allocate new clients is untenable in the face of the same workforce shortages. With this gap in mind, the goal of the current study is to evaluate the utility of leveraging electronic mental health records (EMHR) with machine learning models to anticipate and monitor the number of hours per week that individual clients contribute to a provider's work. Specific objectives include: (i) identify the best features to predict client-related work (caseweight) from structured demographic, administrative and assessment EMHRs; (ii) compare the predictive accuracy of several tree-based and neural network algorithms to predict client-related work; iii) compare the utility of modelling a continuous index of work (hours per week) compared to a classification of work intensity (i.e., low, medium, high) (iv) determine the potential for early and ongoing caseweight prediction to inform case assignment and workload management."
 language: 
   citation-last-author-separator: "&"
 floatsintext: true
@@ -71,7 +71,7 @@ format:
   apaquarto-html:
     comments:
       hypothesis: true
-  apaquarto-docx: default
+#  apaquarto-docx: default
 #  apaquarto-pdf: default
 #    documentmode: man
 ---

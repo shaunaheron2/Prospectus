@@ -86,7 +86,7 @@ local get_author_paragraph = function(authors, different)
           sep = ""
         elseif i == #authors then
           if i == 2 then
-            sep = " " .. andreplacement .. ""
+            sep = " " .. andreplacement .. " "
           else
             sep = ", " .. andreplacement .. " "
           end
@@ -259,7 +259,19 @@ return {
 
       
       if not mask then
-      body:extend({authordiv})
+        body:extend({authordiv})
+      end
+      
+      if meta["draft-date"] then
+        draftdate = os.date("%B %d, %Y")
+        if type(meta["draft-date"]) == "table" then
+          draftdate = meta["draft-date"]
+        end
+        draftdatediv = pandoc.Div({
+            pandoc.Para(draftdate)
+        })
+        draftdatediv.classes:insert("Author")
+        body:extend({draftdatediv})
       end
       
       local authornoteheadertext = "Author Note"
