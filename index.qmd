@@ -140,7 +140,7 @@ The de-identified data will include approximately 6000 records containing demogr
 
 ## Procedure
 
-The following steps outline the proposed process which will consist of four phases: 1) data cleaning, preprocessing and exploration; 2) aggregating workload proxies (direct and indirect services hours) that will be used as stand-ins for actual workload; 3) identifying and extracting indicators of workload (i.e.,independent variables/features) that could be used to model our proxies; 3) modeling the relationship between the indicators and proxies with machine learning algorithms of varying complexity; and 4) evaluating and comparing the models' performance on a set of unseen data (see @fig-procedure-flow).
+The following steps outline the proposed process which will consist of four phases: 1) data cleaning, preprocessing and exploration; 2) data splitting; 3) aggregating workload proxies (direct and indirect services hours) that will be used as stand-ins for actual workload; 4) identifying and aggregating indicators of workload (i.e.,independent variables/features) that will be used to model our proxies; 5) modeling the relationship between the indicators and proxies with machine learning algorithms of varying complexity; and 6) evaluating the accuracy of predictions on the unseen test data (see @fig-procedure-flow).
 
 ![Experimental procedure](images/experimental-modelling-procedure.svg){#fig-procedure-flow apa-note="Flowchart of the experimental procedure. Data will be split into training and test sets by client ID. The training set will be used to train the models using 10-fold group cross-validation, while the test set will act as a control group to evaluate the models' performance on unseen data."}
 
@@ -156,13 +156,13 @@ With the exception of static information like presenting concern or referral sou
 
 ### Outcome (target) generation
 
-**Caseweight prediction modeling and evaluation.** The caseweight prediction task will be defined as both a continuous regression problem to be performed on a weekly basis and a continuous classification problem on the same timeline (low, medium, high intensity). For each week, the model will predict the weekly hours needed during the upcoming 28 days. Applying a rolling window approach will allow for a periodic update of the caseweight by incorporating newly available data (or the absence of it) at the beginning of each week. The approach is common in settings where predictions are to be used in real time and when data are continuously updated [@garriga2022].
+**Caseweight prediction modeling and evaluation.** The caseweight prediction task will be defined as both a continuous regression problem to be performed on a weekly basis and a continuous classification problem on the same timeline (low, medium, high intensity). For each week, the model will estimate the weekly hours needed during the upcoming 28 days. A rolling window approach will be applied to allow for a periodic update of the caseweight by incorporating newly available data (or the absence of it) at the beginning of each week. This approach is common in settings where predictions are to be used in real time and when data are continuously updated [@garriga2022].
 
-To construct a continuous case-weight prediction target, the sum of client-related direct and indirect hours logged by clinicians and associated with a specific program and client will be aggregated at the same weekly level as the features, based on the time recorded by the worker prior to that week. We also intend to examine which measure of client-related time is most stable and reliable over time both direct and indirect time or either on its own.
+To construct a continuous case-weight prediction target, the sum of client-related direct and indirect hours logged by clinicians and associated with a specific program and client will be aggregated at the same weekly level as the features, based on the time recorded by the worker prior to that week. We also intend to examine which measure of client-related time is most stable and reliable over time: the summed direct and indirect time or either on its own.
 
 ### Features (predictors) generation.
 
-We will extract features from a total possible feature set of approximately 250 features. Informed by @garriga2022, extraction will be performed according to six data characteristics:
+We will extract features from a total possible feature set of approximately 250 features. Informed by @garriga2022's methodology, extraction will be performed according to six data characteristics:
 
 **Static or semi-static features.** demographics data will be represented as constant values attributed to each case with age treated as a special case that changes each year.
 
