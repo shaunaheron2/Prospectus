@@ -152,6 +152,8 @@ Importantly, feature engineering–the creation of new predictors based on exist
 
 With the exception of static information like presenting concern or referral source, all EHR data will include the associated date and time. The date and time refer to the moment when the specific event or assessment occurred—that is, the date and time that there was a contact with a client. To prepare the data for the modeling task, each client's case records will be consolidated at a weekly level according to the date associated with the record. Following this process, evenly spaced time series will be generated for each client spanning from their first interaction with Compass to the study’s final week. The features and labels generated for each week will be computed using the data from dates prior to that week. Static data that is susceptible to change over time (for example, postal code or school board information) will be removed to mitigate the risk of retrospective leakage.
 
+![](images/paste-1.png)
+
 ### Outcome (target) generation
 
 **Caseweight prediction modeling and evaluation.** The caseweight prediction task will be defined as both a continuous regression problem to be performed on a weekly basis and a continuous classification problem on the same timeline (low, medium, high intensity). For each week, the model will predict the weekly hours needed during the upcoming 28 days. Applying a rolling window approach will allow for a periodic update of the caseweight by incorporating newly available data (or the absence of it) at the beginning of each week. The approach is common in settings where predictions are to be used in real time and when data are continuously updated [@garriga2022].
@@ -168,7 +170,7 @@ We will extract features from a total possible feature set of approximately 250 
 
 **EHR weekly aggregations.** Records related to client-agency interactions will be aggregated on a weekly basis for each client. The resulting features will constitute counts of each type interaction and one-hot encoded according to their categorization. One-hot coding is a type of dummy variable where if a specific event did occur there will be a 1 for that week and if not a value of 0 will be assigned to the feature related to the corresponding event for the corresponding week.
 
-**Time-elapsed features.** At each client-week, for each type of interaction and category, we will construct a feature that counts the number of elapsed weeks since the last occurence of the corresponding event. If the client never experienced such an event type up to that point in time, an NA value will be used.
+**Time-elapsed features.** At each client-week, for each type of interaction and category, we will construct a feature that counts the number of elapsed weeks since the last occurrence of the corresponding event. If the client never experienced such an event type up to that point in time, an NA value will be used.
 
 **Last crisis episode descriptors.** For each crisis episode, a set of descriptors will be used to build feature for the subsequent weeks until the next crisis events occurs. If the client never had a crisis event up until that point in time, NA values will be used.
 
@@ -214,11 +216,13 @@ table2 |> gt() |> gt_theme_pff() |> fmt_missing(columns = everything(), missing_
 
 ## Validation and Testing
 
-Final models will be statistically compared and evaluated on the test set using appropriate performance metrics depending on whether it is a regression task (mean absolute error or root mean squared error) or classification task (accuracy, precision, recall and area under the curve). The evaluations will help determine the accuracy, generalizability and robustness of each model [@salditt2023; @wang2021]. Final models will also be analyzed to identify which predictors were the most important in terms of estimate client-related work. ADD INFO ABOUT SHAP HERE.
+Final models will be statistically compared and evaluated on the test set using appropriate performance metrics depending on whether it is a regression task (mean absolute error or root mean squared error) or classification task (accuracy, precision, recall and area under the curve). The evaluations will help determine the accuracy, generalizability and robustness of each model [@salditt2023; @wang2021]. Final models will also be analyzed to identify which predictors were the most important in terms of estimate client-related work.
+
+Furthermore, to enhance the interpretability of our model, we plan to implement SHapley Additive exPlanations (SHAP) for feature analysis [@lundberg]. SHAP is a method that helps quantify the contribution of each feature to the model's predictions, providing insights into how specific client characteristics and historical data points influence predicted weekly clinician hours. In a mental health care setting, interpretability is essential, as decisions directly impact client care and resource allocation [@feretzakis2024]. Clinicians and administrators need to understand not only the predicted workload but also the driving factors behind each prediction to ensure fair, personalized, and transparent decision-making . For instance, if certain factors like recent diagnoses or patterns of no-shows are highly influential, this can guide intervention strategies and inform staffing decisions tailored to client needs. SHAP's ability to provide such detailed, interpretable explanations makes it a critical tool for ensuring that the model’s predictions are aligned with clinical understanding and ethical care practices [@feretzakis2024].
 
 ## Software and Tools
 
-A Python kernel will be used for model building and evaluation (Khun & Wickham 2020) [\[KP1\]](#_msocom_1) Quarto Markdown will be used for documentation and reproducibility inside Positron IDE [@vanrossum1995].
+A Python kernel will be used for model building and evaluation (Khun & Wickham 2020). Quarto Markdown will be used for documentation and reproducibility inside Positron IDE [@vanrossum1995].
 
 # Limitations and Challenges
 
@@ -228,7 +232,9 @@ Moreover, our reliance on electronic health records means that the quality and c
 
 Another limitation is the exclusion of provider-side variables from our models. While this decision is aimed at maximizing fairness in allocation of cases, it also means that potentially valuable information about resource utilization influenced by provider characteristics is not considered. This could impact the comprehensiveness and accuracy of our workload predictions. In future iterations, it might be interesting to introduce a feedback loop where staff perception of workload is accounted for with a weekly or monthly "caseload satisfaction" measure.
 
-Given the pressing need for a case-management tool that can more accurately and fairly assess client-related work, we believe our proposed study is a timely addition. Not only does our research have the potential to advance understanding of the relationship between client characteristics and resource use, but it also contributes to the broader goal of optimizing mental health services to ensure that young people and their families receive high-quality, timely care.
+Finally, while predictive accuracy and interpretability are crucial, a prospective cohort study would be necessary as a next step to evaluate how effectively the model supports clinical decision-making in practice. Such a study would allow us to track how predictions influence clinician workload distribution and client outcomes over time, providing a deeper understanding of its practical benefits and potential drawbacks in a live clinical setting. @garriga2022 demonstrated this approach effectively, showing that prospective cohort studies can offer insights into the model’s impact on workflow, clinician satisfaction, and client care quality. In future research, implementing a cohort study could help validate the model’s usefulness and refine it for improved applicability in mental health care settings.
+
+In summary, this study addresses the need for tools that support equitable clinical decision-making in assessing client-related workload within community-based mental health settings where resources are limited and demand is high. By applying machine learning with advanced time-series techniques—one of the first uses of its kind in outpatient mental health care—we aim to examine the relationship between client characteristics and resource utilization. This approach contributes to efforts toward optimizing service delivery by providing data-driven insights into workload management practices, ultimately supporting timely, effective care for young people and their families.
 
 # References
 
