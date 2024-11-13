@@ -183,7 +183,9 @@ In addition to record-based features, we will also add the week number (of a yea
 ```{r}
 #| echo: false
 #| warning: false
-
+#| label: tbl-predictors
+#| tbl-cap: Planned Features (Predictors)
+#| tbl-cap-location: top
 library(tidyverse)
 library(gt)
 library(gtExtras)
@@ -214,6 +216,9 @@ We plan to utilize the following supervised machine-learning algorithms for both
 #| echo: false
 #| warning: false
 #| message: false
+#| label: tbl-models
+#| tbl-cap: Planned Machine Learning Models
+#| tbl-cap-location: top
 table2 <- read_excel("Predictors.xlsx", sheet=2)
 table2 |> gt() |> gt_theme_pff() |> fmt_missing(columns = everything(), missing_text = " ")
 ```
@@ -238,7 +243,9 @@ Another limitation is the exclusion of provider-side variables from our models. 
 
 Finally, while predictive accuracy and interpretability are crucial, a prospective cohort study would be necessary as a next step to evaluate how effectively the model supports clinical decision-making in practice. Such a study would allow us to track how predictions influence clinician workload distribution and client outcomes over time, providing a deeper understanding of its practical benefits and potential drawbacks in a live clinical setting. @garriga2022 demonstrated this approach effectively, showing that prospective cohort studies can offer insights into the model’s impact on workflow, clinician satisfaction, and client care quality. In future research, implementing a cohort study could help validate the model’s usefulness and refine it for improved applicability in mental health care settings.
 
-In summary, this study addresses the need for tools that support equitable clinical decision-making in assessing client-related workload within community-based mental health settings where resources are limited and demand is high. By applying machine learning with advanced time-series techniques—one of the first uses of its kind in outpatient mental health care—we aim to examine the relationship between client characteristics and resource utilization. This approach contributes to efforts toward optimizing service delivery by providing data-driven insights into workload management practices, ultimately supporting timely, effective care for young people and their families.
+# Conclusion
+
+In conclusion, this research represents a crucial step toward addressing the complex and growing demands within mental health services with a data-driven approach. By developing a machine learning model to predict clinician workload, we aim to offer actionable insights that support fair resource distribution and responsive service delivery. Our approach will not only contribute to the field of mental health care by enhancing our understanding of workload drivers but also aligns with the pressing need for scalable, automated and efficient care solutions. Ultimately, this research has the potential to improve outcomes for clinicians and clients alike, ensuring that mental health care services are equipped to meet the needs of vulnerable populations with greater precision and equity.
 
 # References
 
