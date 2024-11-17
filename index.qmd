@@ -71,7 +71,7 @@ format:
   apaquarto-html:
     comments:
       hypothesis: true
-  apaquarto-docx: default
+#  apaquarto-docx: default
 #  apaquarto-pdf: default
 #    documentmode: man
 ---
