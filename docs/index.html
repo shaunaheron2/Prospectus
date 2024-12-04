@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Shauna Heron">
+<meta name="author" content="Michael Emond">
+<meta name="author" content="Luc Rousseau">
+<meta name="author" content="Kalpdrum Passi">
+<meta name="author" content="Nicholas Schwabe">
+<meta name="keywords" content="workload, caseload, case management, data science, machine learning, organizational psychology">
+<meta name="description" content="BEYOND COUNTING CLIENTS: DEVELOPING A MEASURE OF CLINICIAN WORKLOAD WITH MACHINE LEARNING">
+
+<title>Beyond counting clients: Developing a measure of clinician workload with machine learning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-8a9a5d35d57c5ceb6daa097d53f11d58.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="_extensions/wjschne/apaquarto/apa.css">
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#methodology" id="toc-methodology" class="nav-link active" data-scroll-target="#methodology">Methodology</a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#data-set" id="toc-data-set" class="nav-link" data-scroll-target="#data-set">Data Set</a></li>
+  <li><a href="#data-security" id="toc-data-security" class="nav-link" data-scroll-target="#data-security">Data Security</a></li>
+  <li><a href="#data-preprocessing" id="toc-data-preprocessing" class="nav-link" data-scroll-target="#data-preprocessing">Data Preprocessing</a></li>
+  <li><a href="#data-splitting-and-cross-validation" id="toc-data-splitting-and-cross-validation" class="nav-link" data-scroll-target="#data-splitting-and-cross-validation">Data Splitting and Cross-Validation</a>
+  <ul class="collapse">
+  <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">Cross-Validation</a></li>
+  </ul></li>
+  <li><a href="#features" id="toc-features" class="nav-link" data-scroll-target="#features">Feature Generation (Independent Variables)</a></li>
+  <li><a href="#target-generation-dependent-variable" id="toc-target-generation-dependent-variable" class="nav-link" data-scroll-target="#target-generation-dependent-variable">Target Generation (Dependent Variable)</a></li>
+  <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection">Model Selection</a></li>
+  <li><a href="#validation-and-testing" id="toc-validation-and-testing" class="nav-link" data-scroll-target="#validation-and-testing">Validation and Testing</a></li>
+  <li><a href="#software-and-tools" id="toc-software-and-tools" class="nav-link" data-scroll-target="#software-and-tools">Software and Tools</a></li>
+  </ul></li>
+  <li><a href="#limitations-and-challenges" id="toc-limitations-and-challenges" class="nav-link" data-scroll-target="#limitations-and-challenges">Limitations and Challenges</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<br>
+
+<br>
+
+<section id="title" class="level1 title unnumbered unlisted">
+<h1 class="title unnumbered unlisted">Beyond counting clients: Developing a measure of clinician workload with machine learning</h1>
+<div class="Author">
+<br>
+
+<p>Shauna Heron<sup>1,2</sup>, Michael Emond<sup>1</sup>, Luc Rousseau<sup>1</sup>, Kalpdrum Passi<sup>2</sup>, &amp; Nicholas Schwabe<sup>3</sup></p>
+<p><sup>1</sup>Department of Psychology, Laurentian University</p>
+<p><sup>2</sup>Department of Mathematics &amp; Computer Science, Laurentian University</p>
+<p><sup>3</sup>Compass</p>
+</div>
+</section>
+<section id="author-note" class="level1 unnumbered unlisted AuthorNote">
+<h1 class="unnumbered unlisted AuthorNote">Author Note</h1>
+<p>Shauna Heron <img src="_extensions/wjschne/apaquarto/ORCID-iD_icon-vector.svg" id="orchid" class="img-fluid" style="width:4.23mm" alt="Orcid ID Logo: A green circle with white letters ID"> http://orcid.org/0000-0002-9262-6718</p>
+<p>Author roles were classified using the Contributor Role Taxonomy (CRediT; https://credit.niso.org/) as follows: <em>Michael Emond</em><strong>: </strong>supervision. <em>Luc Rousseau</em><strong>: </strong>advisory committee. <em>Kalpdrum Passi</em><strong>: </strong>supervision &amp; advisory committee. <em>Nicholas Schwabe</em><strong>: </strong>advisory committee</p>
+<p>Correspondence concerning this article should be addressed to Shauna Heron, Department of Psychology, Laurentian University, Sudbury, ON, Canada, Email: sheron@laurentian.ca</p>
+</section>
+<section id="abstract" class="level1 unnumbered unlisted AuthorNote">
+<h1 class="unnumbered unlisted AuthorNote">Abstract</h1>
+<div class="AbstractFirstParagraph">
+<p>As child and youth mental health (CYMH) providers face increasing service demands, anticipating and optimizing staff caseloads is critical to maintaining provider well-being and delivering equitable, high-quality care. However, there are a lack of efficient and reliable tools to support this decision-making in a way that accounts for variable client need and is cost-effective and fair. Manual review of client records, necessary to fairly and efficiently allocate new clients and monitor existing caseloads, is untenable in the face of the same workforce shortages. With this gap in mind, we propose examining the utility of leveraging machine learning algorithms trained on electronic mental health records (EHRs) to estimate the number of provider hours a client may require in the coming weeks. Specific objectives include: (i) identifying the features that best predict client-related provider hours from structured demographic, administrative and assessment EHRs at the earliest stages of client contact (i.e., intake screener scores) and at weekly intervals throughout treatment (i.e., aggregated visit counts, &nbsp;days since the last contact); ii) compare tree-based and neural network machine learning algorithms in their ability to predict client-related provider hours; iii) compare the utility of modelling a continuous index of needed provider hours compared to a classification of the same (i.e., low, medium, high); (iv) conduct interpretability analyses to identify and explain the contributions of individual features to model predictions.</p>
+</div>
+<p><em>Keywords</em>: workload, caseload, case management, data science, machine learning, organizational psychology</p>
+</section>
+<section id="firstheader" class="level1 title unnumbered unlisted">
+<h1 class="title unnumbered unlisted">Beyond counting clients: Developing a measure of clinician workload with machine learning</h1>
+<p>Amidst the growing demand for child and youth mental health services, human resource challenges have been identified as a significant barrier to timely, high-quality care <span class="citation" data-cites="worldme2022 childrensmentalhealthontario2022">(<a href="#ref-childrensmentalhealthontario2022" role="doc-biblioref">CMHO, 2022</a>; <a href="#ref-worldme2022" role="doc-biblioref">WHO, 2022</a>)</span>. In 2020, a survey of Ontario community child and youth mental health (CYMH) centres revealed that 83% of agencies reported staff vacancies, 59% of them direct service, front-line positions (i.e., social workers, psychologists, and psychotherapists). This is a concern, as without an adequate and qualified workforce, children, youth and their families experience longer wait times, causing gaps in service that ultimately impact outcomes <span class="citation" data-cites="childrensmentalhealthontario2020 comeau2019">(<a href="#ref-childrensmentalhealthontario2020" role="doc-biblioref">CMHO, 2020</a>; <a href="#ref-comeau2019" role="doc-biblioref">Comeau et al., 2019</a>)</span>. Illustratively, the same CMHO survey reported that 28,000 children and youth in Ontario were waiting up to 2.5 years for mental health services, some even “aging out” of the system before they were off the wait list <span class="citation" data-cites="childrensmentalhealthontario2020 cymhlac2019">(<a href="#ref-childrensmentalhealthontario2020" role="doc-biblioref">CMHO, 2020</a>; <a href="#ref-cymhlac2019" role="doc-biblioref">CYMHLAC, 2019</a>)</span>.</p>
+<p>With over 70% of mental health and addiction problems starting before age seventeen, any delay in access to service is a problem <span class="citation" data-cites="worldme2022 cmho2019 childrensmentalhealthontario2020">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>, <a href="#ref-childrensmentalhealthontario2020" role="doc-biblioref">2020</a>; <a href="#ref-worldme2022" role="doc-biblioref">WHO, 2022</a>)</span>. Not only are critical opportunities for early intervention missed, but individual and family stress related to mental health challenges are compounded, increasing the burden to a public health care system, where in Ontario, hospitalization of youth with mental health and addiction issues has increased over the last 30 years by an estimated 90% <span class="citation" data-cites="childrensmentalhealthontario2020 cymhlac2019">(<a href="#ref-childrensmentalhealthontario2020" role="doc-biblioref">CMHO, 2020</a>; <a href="#ref-cymhlac2019" role="doc-biblioref">CYMHLAC, 2019</a>)</span>. At the same time, when demand outpaces staffing, existing providers often end up managing higher client volumes containing more complex cases, which can perpetuate a cycle of provider burnout, absenteeism and high turnover <span class="citation" data-cites="comeau2019 king2009">(<a href="#ref-comeau2019" role="doc-biblioref">Comeau et al., 2019</a>; <a href="#ref-king2009" role="doc-biblioref">King, 2009</a>)</span>. For this reason, the ability to anticipate and monitor the caseloads of providers is critical to improving client outcomes and minimizing provider burnout <span class="citation" data-cites="king2000 king2009">(<a href="#ref-king2000" role="doc-biblioref">King et al., 2000</a>; <a href="#ref-king2009" role="doc-biblioref">King, 2009</a>)</span>.</p>
+<section id="background" class="level2">
+<h2 data-anchor-id="background">Background</h2>
+<p>According to recent reports by the Auditor General of Ontario on Child and Youth Mental Health, a vital issue limiting agencies’ ability to meet rising demand is the challenge of monitoring client-to-provider workload ratios in a way that accounts for individual client needs <span class="citation" data-cites="officeoftheauditorgeneralofontario2016 officeoftheauditorgeneralofontario2018">(<a href="#ref-officeoftheauditorgeneralofontario2016" role="doc-biblioref">Auditor General of Ontario, 2016</a>, <a href="#ref-officeoftheauditorgeneralofontario2018" role="doc-biblioref">2018</a>)</span>. Ideally, as case complexity increases, the overall number of cases in a provider’s portfolio (case count) should decrease; however, the administrative resources required to manually evaluate each case across dozens of caseloads are beyond what most public agencies can support <span class="citation" data-cites="cmho2019">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>)</span>. As a result, cases are often assigned under the assumption that each requires a similar level of effort <span class="citation" data-cites="cmho2019">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>)</span>. As a consequence, some clinicians consistently manage a higher proportion of complex cases than others <span class="citation" data-cites="king2009 childrensmentalhealthontario2022">(<a href="#ref-childrensmentalhealthontario2022" role="doc-biblioref">CMHO, 2022</a>; <a href="#ref-king2009" role="doc-biblioref">King, 2009</a>)</span>. For example, an agency might set a target of 20 cases per provider for counselling services, meaning that providers with fewer than 20 cases have “room” for more, regardless of how many complex cases they have in their overall portfolio.</p>
+<p>This “casecount” approach to determining caseloads can result in significant disparities in work, particularly for more experienced clinicians who may be assigned more complex cases due to their expertise <span class="citation" data-cites="cmho2019 king2000">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>; <a href="#ref-king2000" role="doc-biblioref">King et al., 2000</a>)</span>. Complex cases may include those with severe behavioural challenges, high-risk family situations, or co-occurring mental health and developmental disorders, often requiring additional phone calls to coordinate with schools or other community supports, more frequent consultations with other professionals, longer or more detailed treatment plans, and extended documentation time <span class="citation" data-cites="cmho2019 king2009">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>; <a href="#ref-king2009" role="doc-biblioref">King, 2009</a>)</span>. Without a systematic way to monitor workload beyond case counts, administrators may unknowingly overburden some staff, assuming they have the capacity for more cases when they may already be overburdened <span class="citation" data-cites="king2009">(<a href="#ref-king2009" role="doc-biblioref">King, 2009</a>)</span>. A reliance on providers to self-report when they feel overwhelmed creates an uneven system where some clinicians silently manage unsustainable workloads, which can lead to burnout and diminished care quality <span class="citation" data-cites="cmho2019 king2009">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>; <a href="#ref-king2009" role="doc-biblioref">King, 2009</a>)</span>.</p>
+<p>Given this state of affairs, if there was a data-driven tool that could quantify workload based on client complexity rather than counts, it might support clinical decision-makers in a fairer distribution of work <span class="citation" data-cites="king2009 tran2019">(<a href="#ref-king2009" role="doc-biblioref">King, 2009</a>; <a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>. However, the development of sophisticated data-driven predictive tools to aid in clinical decision-making has been hampered by a lack of resources across the public health sector generally <span class="citation" data-cites="childrensmentalhealthontario2022 officeoftheauditorgeneralofontario2018">(<a href="#ref-officeoftheauditorgeneralofontario2018" role="doc-biblioref">Auditor General of Ontario, 2018</a>; <a href="#ref-childrensmentalhealthontario2022" role="doc-biblioref">CMHO, 2022</a>)</span>, limits imposed by paper-based client record systems <span class="citation" data-cites="cmho2019">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>)</span>, and iv) lack of computing power and expertise in modelling complex electronic health record data in ways that are transparent and interpretable <span class="citation" data-cites="xiao2018 garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>; <a href="#ref-xiao2018" role="doc-biblioref">Xiao et al., 2018</a>)</span>. However, the recent transition of CYMH services in Ontario from paper-based health records to electronic records, combined with increased computational power and advances in computer science, has opened the possibility of leveraging EHRs with machine algorithms to improve client outcomes.</p>
+<p>With this gap in mind, the current research proposes to explore the feasibility of estimating the time that a given client might need from a provider at intervals across the treatment timeline using information contained in the EHR with the eventual goal of testing whether such predictions provide actual added value to clinical practice. The research assumes that historical patterns predict future mental health resource use and that such patterns can be identified in electronic mental health records (EHR) despite their inherent sparseness and systematic bias <span class="citation" data-cites="garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>)</span>.</p>
+<section id="case-mix-history" class="level3">
+<h3 data-anchor-id="case-mix-history">Case-mix History</h3>
+<p>Across healthcare domains, particularly emergency medicine, various strategies have been employed to manage provider workload by mapping service levels to client characteristics like symptom severity or prior diagnoses <span class="citation" data-cites="johnson1998 tran2019">(<a href="#ref-johnson1998" role="doc-biblioref">Johnson et al., 1998</a>; <a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>. Case-mix classification systems have been used in the healthcare sector to help payers and agencies monitor costs by categorizing clients based on their expected resource use <span class="citation" data-cites="tran2019 johnson1998">(<a href="#ref-johnson1998" role="doc-biblioref">Johnson et al., 1998</a>; <a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>. Case-mix algorithms assume that though the needs of an individual will be unique, shared characteristics determine the type and intensity of treatment needed (e.g., family counselling versus crisis intervention). Typically, these systems are informed by information contained in patient (case) records. At the agency level, case records contain various information, including provider-level information like the number of direct and indirect hours associated with individual clients and client-level characteristics like diagnoses, treatment history, referral source and presenting symptoms (e.g., crisis intervention versus brief services) <span class="citation" data-cites="cmho2019">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>)</span>.</p>
+<p>Typically, these systems take one of two approaches to classification <span class="citation" data-cites="cmho2019">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>)</span>. Grouping systems assign people to classes in terms of their expected resource use, with each group having a specific weight (e.g., time-intensive treatment versus brief treatment) relative to the average case in the population <span class="citation" data-cites="tran2019 johnson1998">(<a href="#ref-johnson1998" role="doc-biblioref">Johnson et al., 1998</a>; <a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>. For example, a client accessing long-term counselling and therapy services might be assigned a greater weight in terms of expected resource use than a client accessing a one-session brief service. Index systems, on the other hand, combine different case characteristics to provide a value that maps to expected resource use or acuity of needs (e.g.&nbsp;a case weight or case complexity score that ranges from 0, the least complex, to 1, the most complex) <span class="citation" data-cites="tran2019 cmho2019">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>; <a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>. Indexing systems are often used to triage cases by assigning a score to new clients based on answers to an intake assessment. Often, there is a threshold score above which clients are considered acute and may receive services more quickly; at the same time, scores below a specific threshold may not qualify for publicly funded services at all. For instance, a youth reporting thoughts of suicide or other self-harming behaviour will likely index higher than a youth reporting problems remaining focused in school <span class="citation" data-cites="cmho2019">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>)</span>.</p>
+<p>Case-mix algorithms are typically conceptual, rules-based frameworks that rely on predefined factors known or hypothesized to influence client care needs <span class="citation" data-cites="tran2019">(<a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>. These frameworks are guided by clinical expertise, existing research, or policy guidelines and often utilize well-defined variables, such as demographic characteristics, diagnoses, or treatment types, to estimate resource use. In contrast, data-driven frameworks employ empirical analysis, leveraging statistical or machine learning techniques to identify patterns and groupings in client populations without relying on prior assumptions <span class="citation" data-cites="tran2019 martin2020 garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>; <a href="#ref-martin2020" role="doc-biblioref">Martin et al., 2020</a>; <a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>.</p>
+<p>Data-driven approaches offer the potential to uncover novel insights that conceptual frameworks may miss. For example, a machine learning model could reveal previously unrecognized patterns within client populations, enabling more precise and effective resource allocation <span class="citation" data-cites="sheetal2023 garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>; <a href="#ref-sheetal2023" role="doc-biblioref">Sheetal et al., 2023</a>)</span>. However, these approaches also introduce challenges, including a reliance on high-quality data and the risk of embedding biases present in the data into the analysis <span class="citation" data-cites="chen2023">(<a href="#ref-chen2023" role="doc-biblioref">Chen et al., 2023</a>)</span>.</p>
+<p>For this reason, a hybrid approach—combining conceptual expertise for clinical validity with data-driven methods for automation and insight discovery—is considered ideal <span class="citation" data-cites="garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>)</span>. This approach leverages the strengths of both frameworks, providing clinically valid insights while enabling automated and novel pattern recognition. However, the complexity of modeling EHR data, particularly in mental health service delivery, has hindered the development of reliable data-driven frameworks <span class="citation" data-cites="tran2019">(<a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>.</p>
+<p>Existing research has largely focused on acute, inpatient hospital settings, where conditions often have clear diagnostic criteria and predictable recovery trajectories, such as the fixed timeline and treatment protocol for a broken arm <span class="citation" data-cites="tran2019 aminizadeh2023 garriga2022">(<a href="#ref-aminizadeh2023" role="doc-biblioref">Aminizadeh et al., 2023</a>; <a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>; <a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>. In contrast, community-based outpatient mental health care presents unique challenges. Recovery from conditions like anxiety or depression is inherently more subjective and individualized, with fewer standardized recovery paths, making the modeling of these data significantly more complex <span class="citation" data-cites="tran2019">(<a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>.</p>
+</section>
+<section id="research-challenges" class="level3">
+<h3 data-anchor-id="research-challenges">Research challenges</h3>
+<p>The challenges inherent in modelling electronic mental health data are underscored by the limited body of research addressing this problem despite its urgency <span class="citation" data-cites="tran2019">(<a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>. A 2019 scoping review of case-mix literature in community-based mental health care identified only one study that employed data-driven methods to predict mental health care resource needs in children and youth populations <span class="citation" data-cites="tran2019 martin2020">(<a href="#ref-martin2020" role="doc-biblioref">Martin et al., 2020</a>; <a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>. That study analyzed 4,573 client records from 11 UK outpatient CYMH agencies, comparing a conceptual ‘clinical-judgement’ framework to cluster analysis and negative binomial regression to predict the number of appointments a client would attend during treatment <span class="citation" data-cites="martin2020">(<a href="#ref-martin2020" role="doc-biblioref">Martin et al., 2020</a>)</span>. While the data-driven classification did as well as the conceptual classification, the researchers suggest that data quality issues (systematic errors introduced by data entry or subjective ratings) and omission of important individual-level factors that were not contained in the EHR impacted the accuracy of their models <span class="citation" data-cites="martin2020">(<a href="#ref-martin2020" role="doc-biblioref">Martin et al., 2020</a>)</span>. This finding underscores the need for improved data quality and the inclusion of all relevant individual-level factors available to enhance the accuracy of workload prediction in mental health care settings.</p>
+<p>In a related cohort, researchers attempted to predict the workload associated with client characteristics at a community-based mental health center for the elderly, aiming to develop a more accurate representation of workload than simple case counts could provide <span class="citation" data-cites="baillon2009">(<a href="#ref-baillon2009" role="doc-biblioref">Baillon et al., 2009</a>)</span>. Using an eight-item, self-designed Case Weighting Scale (CWS), they identified factors that staff perceived as contributing to time demands. After an initial assessment, clinicians would complete the CWS for each client, assigning scores based on factors such as family support, communication difficulties or risk of harm to self or others. These scores were input into a multiple regression model, which generated an estimate of the total time the client would need over four weeks<span class="citation" data-cites="baillon2009">(<a href="#ref-baillon2009" role="doc-biblioref">Baillon et al., 2009</a>)</span>. The model accounted for 58% of the variance in time spent on client-related work, which they considered a success. However, the sample size of only 87 cases raises concerns about the model’s generalizability and accuracy <span class="citation" data-cites="baillon2009">(<a href="#ref-baillon2009" role="doc-biblioref">Baillon et al., 2009</a>)</span>. Additionally, inter-rater and re-rater reliability results suggested that the assessments, whether derived from client self-reports or clinicians’ professional opinions, did not consistently align with the time required for client care <span class="citation" data-cites="baillon2009">(<a href="#ref-baillon2009" role="doc-biblioref">Baillon et al., 2009</a>)</span>. Nevertheless, the study does provide a basis for understanding how client characteristics might be leveraged to predict workload in mental health care settings–particularly with more sophisticated models.</p>
+</section>
+<section id="machine-learning-a-novel-approach-to-modeling-case-mix" class="level3">
+<h3 data-anchor-id="machine-learning-a-novel-approach-to-modeling-case-mix">Machine learning, a novel approach to modeling case-mix</h3>
+<p>Building on the limitations of traditional approaches like regression-based models in the Case Weighting Scale (CWS) study, machine learning (ML) offers a promising alternative for predicting mental health resource needs. Unlike conventional methods, ML algorithms learn directly from data without prior programming and are equipped to handle the high-dimensional nature of EHRs making them well-suited for mapping complex relationships between client features, such as depression scores or prior no-shows with outcomes like weekly service hours <span class="citation" data-cites="an2023a sheetal2023 chen2023">(<a href="#ref-an2023a" role="doc-biblioref">An et al., 2023</a>; <a href="#ref-chen2023" role="doc-biblioref">Chen et al., 2023</a>; <a href="#ref-sheetal2023" role="doc-biblioref">Sheetal et al., 2023</a>)</span>. Supervised ML models aim to optimize a function <span class="math inline">f(x)</span> that predicts an outcome <span class="math inline">Y</span> (e.g., hours per week) from input features <span class="math inline">X</span> (client-level factors), minimizing the difference between predictions and actual data. For example, the mean squared error (MSE) cost function is used to evaluate how well a machine learning model’s predictions match the actual values in regression tasks. It calculates the average of the squared differences between the predicted values <span class="math inline">\hat{y}​</span> and the actual values <span class="math inline">y^i​</span> then gradient descent will calculate the derivative of&nbsp;<span class="math inline">J(θ)</span> with respect to the model’s parameters (e.g., weights and biases) updating them iteratively until it finds the minimum possible error. See <a href="#eq-CostFunction" class="quarto-xref">Equation&nbsp;1</a>. <span id="eq-CostFunction"><span class="math display">
+J(\theta) = \frac{1}{m} \sum_{i=1}^{m} \left( y_i - \hat{y}_i \right)^2
+\tag{1}</span></span></p>
+<p>Within the mental health domain, ML has mainly been used to predict specific events like substance relapse <span class="citation" data-cites="kinreich2021">(<a href="#ref-kinreich2021" role="doc-biblioref">Kinreich et al., 2021</a>)</span>, self-harm, and suicide risk <span class="citation" data-cites="walsh2017 simon2018">(<a href="#ref-simon2018" role="doc-biblioref">Simon et al., 2018</a>; <a href="#ref-walsh2017" role="doc-biblioref">Walsh et al., 2017</a>)</span>. For example, <span class="citation" data-cites="kinreich2021">Kinreich et al. (<a href="#ref-kinreich2021" role="doc-biblioref">2021</a>)</span> used ML to predict a change in drinking behaviour in a population diagnosed with alcohol use disorder (AUD). Combining features like brain connectivity, genetic risk scores and demographic information like age, they achieved 86% accuracy in identifying patients whose AUD had gone into remission, enabling clinicians to provide targeted interventions such as additional counselling sessions or closer monitoring <span class="citation" data-cites="kinreich2021">(<a href="#ref-kinreich2021" role="doc-biblioref">Kinreich et al., 2021</a>)</span>. Another study leveraged ML to monitor patient records and predict crisis relapse in 28-day windows based on EHR data <span class="citation" data-cites="garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>)</span>. The top-performing tree-based XGBoost model correctly differentiated those at risk from those not at risk for crisis relapse about 80% of the time <span class="citation" data-cites="garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>)</span>. In a subsequent post-hoc case study, clinicians rated the predictions as useful for managing patient care in 64% of cases; reporting the estimates helped prioritize patients effectively, potentially preventing crises <span class="citation" data-cites="garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>)</span>. Although the authors did not model resource use directly as we hope to do, ‘crisis risk’ served as a proxy for work. By predicting crises, they aimed to anticipate increased resource demand, allowing for better-informed case prioritization and management. Together, these examples demonstrate the potential of ML in identifying high-risk situations, highlighting its potential to enhance resource planning and improve care delivery in mental health settings <span class="citation" data-cites="garriga2022 wang2021">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>; <a href="#ref-wang2021" role="doc-biblioref">Wang et al., 2021</a>)</span>.</p>
+</section>
+</section>
+<section id="the-current-study" class="level2">
+<h2 data-anchor-id="the-current-study">The current study</h2>
+<p>Building on insights from <span class="citation" data-cites="garriga2022">Garriga et al. (<a href="#ref-garriga2022" role="doc-biblioref">2022</a>)</span> work, the current research aims to explore the feasibility of applying machine learning to EHRs to estimate the number of weekly provider hours a case may require, assessed at 28-day intervals. The underlying assumption is that historical patterns can reliably predict future mental health resource use, like provider hours, and that these patterns are identifiable in electronic mental health records (EHR) <span class="citation" data-cites="tran2019">(<a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>.</p>
+<p>To test these assumptions, we will analyze a retrospective, deidentified dataset from a large child and youth mental health (CYMH) agency in Ontario, Canada, encompassing data from clients served between 2019 and early 2024. Although largely exploratory, the study will be guided by several hypotheses. First, as informed by <span class="citation" data-cites="garriga2022">Garriga et al. (<a href="#ref-garriga2022" role="doc-biblioref">2022</a>)</span>, we hypothesize that workload prediction will be weakest early in the client journey when available EHR data is limited to intake screener results and basic demographic information. However, as more data accumulates over the course of treatment—such as session attendance and crisis events—we anticipate prediction accuracy will significantly improve.</p>
+<p>Consistent with <span class="citation" data-cites="garriga2022">Garriga et al. (<a href="#ref-garriga2022" role="doc-biblioref">2022</a>)</span>’s work, we expect that for new clients, factors such as a lack of family support and risk of harm to self or others will most strongly predict provider hours needed. For known clients, we hypothesize that time-based factors, such as the frequency of no-shows and the number of crisis events, will be more predictive of workload demands <span class="citation" data-cites="wang2021">(<a href="#ref-wang2021" role="doc-biblioref">Wang et al., 2021</a>)</span>.</p>
+<p>Finally, we expect that the winning machine learning algorithm will outperform a baseline model designed to reflect how agencies typically estimate resource needs today. This baseline model will rely on the conceptual approach often used in practice, where resource allocation is based on the type of service a client is accessing (e.g., counselling and therapy services being assigned greater weight than brief interventions) <span class="citation" data-cites="cmho2019">(<a href="#ref-cmho2019" role="doc-biblioref">CMHO, 2019</a>)</span>. By comparing these approaches, the study aims to evaluate the extent to which data-driven machine-learning models can support workload prediction in CYMH settings.</p>
+</section>
+</section>
+<section id="methodology" class="level1">
+<h1>Methodology</h1>
+<section id="overview" class="level2">
+<h2 data-anchor-id="overview">Overview</h2>
+<p>This study aims to estimate the weekly provider hours needed (direct and indirect service) at regular stages in the client journey using machine learning predictive models. The analysis will utilize a retrospective dataset from Compass Child and Youth Family Services, the largest CYMH agency in northern Ontario. Compass serves a culturally and socially diverse population of children, youth, and families, making it a representative setting for this study.</p>
+</section>
+<section id="data-set" class="level2">
+<h2 data-anchor-id="data-set">Data Set</h2>
+<p>The dataset will include de-identified client records with completed initial intake assessments for clients active between January 1, 2019, and December 31, 2024. Only cases with a completed initial screener will be included to ensure the availability of baseline data for generating meaningful predictions. Cases younger than five and older than 17 will be excluded, as Compass’ core services are only offered to children and youth under 18. There are no plans to exclude cases based on any other feature, including diagnoses; however, if, for whatever reason, this changes, it will be outlined in the documentation. The de-identified data will include approximately 6000 EHRs containing hundreds of data points such as demographic information, referrals, diagnoses, risk and well-being assessments and crisis events for all outpatients. The final report will include all variables left over after the initial variable reduction. For an overview of the data flow from raw electronic health records (EHRs) to the derived weekly features used in the predictive model structure, see <a href="#fig-datastructure" class="quarto-xref" aria-expanded="false">Figure&nbsp;1</a>.</p>
+<div id="fig-datastructure" class="quarto-float quarto-figure quarto-figure-left FigureWithNote" data-fig-align="left" data-apa-note="Data flow from raw client records to the derived features used in the predictive model. The top section represents the raw data structure containing rows of client-specific information, including dates, programs, contact types, and contact durations. The middle section visualizes a sample client timeline, mapping key events such as assessment, no-shows, face-to-face contacts, and discharges, which are stored in the EHR. The bottom section shows the weekly aggregate feature set created from these events, with features such as days since last contact and direct hours that were logged for that case in the week prior. The weekly aggregates will be used for model selection and training to predict weekly workload (e.g., weekly caseweight)" data-fignum="1" prefix="" data-custom-style="FigureWithNote">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-datastructure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Figure&nbsp;1</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Data Flow Pipeline</p>
+</div>
+</figcaption>
+<div aria-describedby="fig-datastructure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/datastructure.svg" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:90.0%" data-apa-note="Data flow from raw client records to the derived features used in the predictive model. The top section represents the raw data structure containing rows of client-specific information, including dates, programs, contact types, and contact durations. The middle section visualizes a sample client timeline, mapping key events such as assessment, no-shows, face-to-face contacts, and discharges, which are stored in the EHR. The bottom section shows the weekly aggregate feature set created from these events, with features such as days since last contact and direct hours that were logged for that case in the week prior. The weekly aggregates will be used for model selection and training to predict weekly workload (e.g., weekly caseweight)">
+</div>
+</figure>
+</div>
+<div class="FigureNote" data-custom-style="FigureNote">
+<p><em>Note</em>. Data flow from raw client records to the derived features used in the predictive model. The top section represents the raw data structure containing rows of client-specific information, including dates, programs, contact types, and contact durations. The middle section visualizes a sample client timeline, mapping key events such as assessment, no-shows, face-to-face contacts, and discharges, which are stored in the EHR. The bottom section shows the weekly aggregate feature set created from these events, with features such as days since last contact and direct hours that were logged for that case in the week prior. The weekly aggregates will be used for model selection and training to predict weekly workload (e.g., weekly caseweight)</p>
+</div>
+</section>
+<section id="data-security" class="level2">
+<h2 data-anchor-id="data-security">Data Security</h2>
+<p>Given the sensitivity of mental health data, strict privacy and security measures will be enforced throughout the research process. Necessary ethical approvals will be obtained from relevant ethics boards, including both Compass Child and Youth Family Services and Laurentian University’s institutional review board. An exemption for the use of de-identified data will also be required from both institutions.</p>
+<p>De-identified clinical data will be extracted from Compass’s electronic health information system, which the agency maintains. The data will be de-identified at extraction using the Health Insurance Portability and Accountability Act (HIPAA) Safe Harbor Method <span class="citation" data-cites="rightsocr2012">(<a href="#ref-rightsocr2012" role="doc-biblioref">OCR, 2012</a>)</span>. This process removes all directly identifying information, such as names, addresses, birth dates, and postal codes. Unique client identification codes will also be encrypted using a hashing system to prevent re-identification.</p>
+<p>To further enhance security, the dataset will remain under the custody of Compass at all times. Data analysis will be conducted solely by the principal researcher on a password-protected machine belonging to Compass. Model results, summary statistics, and visualizations will only include aggregate metrics, focusing on predictor and model performance. No individual scores or identifiers linked to clients or small subgroups will be reported. Approval from Compass will be obtained before any findings are disseminated in external reports or presentations.</p>
+</section>
+<section id="data-preprocessing" class="level2">
+<h2 data-anchor-id="data-preprocessing">Data Preprocessing</h2>
+<p>After de-identification, data preprocessing will include cleaning, joining data frames and handling missing values. Decisions regarding missing data will be made on a case-by-case basis, with details on imputation or exclusion documented in the final report. Any data normalization procedures will also be reported. To ensure reproducibility, the Python data scripts used for preprocessing will be publicly available.</p>
+<p>All data points will include an associated date and time, reflecting the moment a specific event or assessment occurred. These timestamps will guide the aggregation of each client’s case records into weekly evenly spaced time series for each client, spanning their first interaction with Compass to the last (see <a href="#fig-datastructure" class="quarto-xref" aria-expanded="false">Figure&nbsp;1</a>). Features and labels for each week will be computed at the start of the week from data that was aggregated the week before, ensuring temporal consistency and avoiding data leakage. Additionally, static data prone to change over time (e.g., postal code or school board information) will be excluded to mitigate the risk of retrospective leakage <span class="citation" data-cites="garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>)</span>. Retrospective data leakage occurs when information from the future (relative to the prediction point in time) inadvertently influences the model during training or evaluation. This typically happens in retrospective studies where datasets contain time-stamped records, and the temporal order of events is not carefully maintained during data preprocessing or feature engineering.</p>
+</section>
+<section id="data-splitting-and-cross-validation" class="level2">
+<h2 data-anchor-id="data-splitting-and-cross-validation">Data Splitting and Cross-Validation</h2>
+<p>To maintain temporal consistency and maximize the generalizability of the models, the plan is to conduct a time-based 80/10/10 split for training, validation, and testing with careful thought to seasonal aspects of our data. Typically, fewer clients access services in the summer months than in the months in which they attend school. For this reason, utilizing only a half year of data for testing would risk biasing predictions. Data splitting will be based on chronological order roughly, as follows:</p>
+<p><em>Training Data:</em> January 2019 to March 2023 (79.69%)</p>
+<p><em>Validation Data:</em> April 2023 to September 2023 (9.38%)</p>
+<p><em>Test Data:</em> October 2023 to April 2024 (10.94%)</p>
+<p>Data from the first six months of the COVID-19 pandemic may need to be excluded, depending on its irregularity in terms of any unusual impact on service delivery. This will be addressed during data cleaning, with details reported in the final documentation.</p>
+<section id="cross-validation" class="level3">
+<h3 data-anchor-id="cross-validation">Cross-Validation</h3>
+<p>Time-based cross-validation will be implemented to tune model parameters and ensure robust evaluation. Cross-validation is a method used to assess how well a model is likely to perform on unseen data <span class="citation" data-cites="an2023a sheetal2023">(<a href="#ref-an2023a" role="doc-biblioref">An et al., 2023</a>; <a href="#ref-sheetal2023" role="doc-biblioref">Sheetal et al., 2023</a>)</span>. Cross-validation divides the training data into sequential, time-based subsets, or “folds,” preserving the data’s chronological order. For each fold, the model parameters will be tuned on earlier time periods and tested on later ones, simulating real-world prediction scenarios where past data is used to forecast future outcomes. “Tuning model parameters” involves adjusting <strong>hyperparameters</strong>, which are internal settings that control how the model learns from the data <span class="citation" data-cites="sheetal2023">(<a href="#ref-sheetal2023" role="doc-biblioref">Sheetal et al., 2023</a>)</span>. Examples include the depth of a decision tree, the number of trees in a random forest, or the learning rate in a neural network. The goal is to find the combination of hyperparameters that minimizes the error between the model’s predictions and the actual values (see <a href="#eq-CostFunction" class="quarto-xref">Equation&nbsp;1</a>). This maximizes the model’s generalizability to new, unseen data, while still accounting for the temporal nature of the dataset.</p>
+<p>The validation set will be used to break any ties between models, without having to tap into the final test set which acts as a control to evaluate the final models’ performance after training and tuning. The test set will remain entirely untouched during feature engineering and model development so as to provide as unbiased an estimation of how the models will perform in real-world scenarios as possible. This final step is crucial for assessing the models’ generalizability and for identifying any over-fitting (when a model performs significantly better on the training data than than the test data) that may have occurred during training <span class="citation" data-cites="an2023a">(<a href="#ref-an2023a" role="doc-biblioref">An et al., 2023</a>)</span>.</p>
+</section>
+</section>
+<section id="features" class="level2">
+<h2 data-anchor-id="features">Feature Generation (Independent Variables)</h2>
+<p>Features–otherwise known as predictors or variables–will be extracted from a total possible set of approximately 400 variables. A complete list of proposed feature groupings and variables is provided in <a href="#tbl-predictors" class="quarto-xref" aria-expanded="false">Table&nbsp;1</a>. A full list of all variables included in the analysis will be reported in the final thesis. Following the methodology outlined in <span class="citation" data-cites="garriga2022">Garriga et al. (<a href="#ref-garriga2022" role="doc-biblioref">2022</a>)</span>, feature extraction will be categorized into six main types:</p>
+<p><strong>Static or Semi-Static Features.</strong> Demographic data will be represented as fixed values for each case. Age will be treated as a particular case, recalculated annually to reflect changes over time.</p>
+<p><strong>Diagnostic Features.</strong> Each client will be assigned their most recent valid diagnosis if any (e.g., developmental disability, psychological disorder, or “undiagnosed”). Diagnoses will be grouped by category, using the latest valid entry up to the end of the training period to prevent data leakage. The final report will document any classification codes generated for these features.</p>
+<p><strong>EHR Weekly Aggregations.</strong> Weekly records of client-agency interactions will be aggregated for each client. These aggregated features will include counts of interaction types (e.g., appointments, no-shows) and one-hot encoded variables indicating whether a specific event occurred within the week. For one-hot encoding, a value of 1 indicates the event occurred, while 0 indicates it did not.</p>
+<p><strong>Time-Elapsed Features.</strong> For each event type and week, a feature will record the number of days since the last occurrence of the event. If the event has never occurred up to that point, the feature will be set to NA.</p>
+<p><strong>Last Crisis Episode Descriptors.</strong> Details from the most recent crisis episode (e.g., type, severity, resolution) will be used to create features for subsequent weeks until the next crisis occurs. If no crisis has occurred, the feature will be set to NA.</p>
+<p><strong>Last Assessment Descriptors.</strong> Features will be created for each assessment item based on the most recent assessment data, with values decaying over time to reflect diminishing relevance. This decay will apply until the next assessment occurs. All clients will have at least one assessment to ensure inclusion in the study.</p>
+<p><strong>Status Features.</strong> For records with a start and end date (e.g., program intake and discharge), features will assign values (or categories) corresponding to the active weeks. The feature will be set to NA for weeks where the record is not applicable.</p>
+<p><strong>Seasonality Effects.</strong> In addition to record-based features, we will add a week number (1-52) to account for seasonality effects each year.</p>
+<p>A final and complete list of all variables will be included in the final report.</p>
+<div class="cell FigureWithoutNote" prefix="" data-tblnum="1" data-tbl-cap-location="top" data-custom-style="FigureWithoutNote">
+<div id="tbl-predictors" class="cell quarto-float quarto-figure quarto-figure-center" data-tblnum="1" data-tbl-cap-location="top" prefix="">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-predictors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="FigureTitle" data-custom-style="FigureTitle">
+<p>Table&nbsp;1</p>
+</div>
+<div class="Caption" data-custom-style="Caption">
+<p>Planned Features (Predictors)</p>
+</div>
+</figcaption>
+<div aria-describedby="tbl-predictors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="ssiywreiqo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ssiywreiqo table {
+  font-family: 'Times New Roman';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ssiywreiqo thead, #ssiywreiqo tbody, #ssiywreiqo tfoot, #ssiywreiqo tr, #ssiywreiqo td, #ssiywreiqo th {
+  border-style: none;
+}
+
+#ssiywreiqo p {
+  margin: 0;
+  padding: 0;
+}
+
+#ssiywreiqo .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 100%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #FFFFFF;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ssiywreiqo .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ssiywreiqo .gt_title {
+  color: #333333;
+  font-size: 16px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ssiywreiqo .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ssiywreiqo .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ssiywreiqo .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ssiywreiqo .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #000000;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #000000;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ssiywreiqo .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ssiywreiqo .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ssiywreiqo .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ssiywreiqo .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ssiywreiqo .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #000000;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ssiywreiqo .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ssiywreiqo .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ssiywreiqo .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ssiywreiqo .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ssiywreiqo .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ssiywreiqo .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ssiywreiqo .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ssiywreiqo .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ssiywreiqo .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ssiywreiqo .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ssiywreiqo .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ssiywreiqo .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ssiywreiqo .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ssiywreiqo .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ssiywreiqo .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ssiywreiqo .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ssiywreiqo .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ssiywreiqo .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ssiywreiqo .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #000000;
+}
+
+#ssiywreiqo .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ssiywreiqo .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ssiywreiqo .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ssiywreiqo .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ssiywreiqo .gt_left {
+  text-align: left;
+}
+
+#ssiywreiqo .gt_center {
+  text-align: center;
+}
+
+#ssiywreiqo .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ssiywreiqo .gt_font_normal {
+  font-weight: normal;
+}
+
+#ssiywreiqo .gt_font_bold {
+  font-weight: bold;
+}
+
+#ssiywreiqo .gt_font_italic {
+  font-style: italic;
+}
+
+#ssiywreiqo .gt_super {
+  font-size: 65%;
+}
+
+#ssiywreiqo .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ssiywreiqo .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ssiywreiqo .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ssiywreiqo .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ssiywreiqo .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ssiywreiqo .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ssiywreiqo .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ssiywreiqo .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ssiywreiqo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="gt_heading header">
+<th colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="text-align: left;"><em></em></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Time-based" class="gt_col_heading gt_columns_bottom_border gt_center" style="text-align: left;" data-quarto-table-cell-role="th" scope="col">Time based</th>
+<th id="Count-based" class="gt_col_heading gt_columns_bottom_border gt_center" style="text-align: left;" data-quarto-table-cell-role="th" scope="col">Count based</th>
+<th id="Latest-contact" class="gt_col_heading gt_columns_bottom_border gt_center" style="text-align: left;" data-quarto-table-cell-role="th" scope="col">Latest contact</th>
+<th id="Static/semi-static-information" class="gt_col_heading gt_columns_bottom_border gt_center" style="text-align: left;" data-quarto-table-cell-role="th" scope="col">Static/semi-static information</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since last crisis event</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Count of crisis events</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Depression acuity score</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Age, gender, school district</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since first contact</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Count of no-shows</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Identified substance use</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">ADHD/Autism diagnosis</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since last no-show</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Counts of substances used</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Current services accessed</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Mental health diagnosis</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since last contact</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Counts of phone calls</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Identified symptoms</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Learning disability diagnosis</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since substance misuse identified</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Count of previous completed services</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Previously indicated risk</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since self/harm identified</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Discharge and referral counts</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Recent contact with child welfare</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since suicide risk identified</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Number of current services</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Recent psychological consult</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since last discharge</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Recent diagnosis</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since last crisis episode</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Current caregiver and family support</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since first visit</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Identified thoughts of suicide</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Time based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;">Weeks since referral</td>
+<td class="gt_row gt_center" headers="Count based" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+<td class="gt_row gt_center" headers="Latest contact" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+<td class="gt_row gt_center" headers="Static/semi-static information" style="text-align: left; border-top-width: 1px; border-top-style: solid; border-top-color: white; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: white; background-color: #FFFFFF;"><br>
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="target-generation-dependent-variable" class="level2">
+<h2 data-anchor-id="target-generation-dependent-variable">Target Generation (Dependent Variable)</h2>
+<p>The prediction task will involve two modelling approaches: a continuous regression problem to estimate weekly provider hours and a classification problem to categorize workload intensity into low, medium, and high levels. Examining both approaches allows for flexibility in how predictions are used in practice <span class="citation" data-cites="wang2021">(<a href="#ref-wang2021" role="doc-biblioref">Wang et al., 2021</a>)</span>. The continuous regression model provides precise estimates of weekly hours, which are valuable for detailed planning and resource allocation. In contrast, the classification model simplifies workload prediction into actionable categories, which may be more practical for agencies to integrate into decision-making workflows, especially in contexts where exact estimates are less critical or more challenging to act on <span class="citation" data-cites="wang2021">(<a href="#ref-wang2021" role="doc-biblioref">Wang et al., 2021</a>)</span>.</p>
+<p>Predictions will be generated weekly, with the model estimating the average weekly provider hours required for the upcoming 28 days using information from weeks prior (see <a href="#fig-datastructure" class="quarto-xref" aria-expanded="false">Figure&nbsp;1</a>). A rolling window approach will be applied to support periodic updates, incorporating newly available data (or the absence of data) at the beginning of each week. This approach, commonly used in real-time predictive systems, allows for continuous refinement of predictions as additional information becomes available <span class="citation" data-cites="garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>)</span>.</p>
+<p>The target variable for the regression task will be constructed by aggregating client-related direct and indirect hours logged by clinicians every Friday at Compass. These hours will be summed at the weekly level, corresponding to the feature engineering timeline, and aligned with the time recorded prior to each prediction week. We will also examine the stability and reliability of the target measure in two forms: the combined total of direct and indirect hours and the number of direct hours on its own, which may be a more stable measure of client-related work than non-direct hours which clinicians may not log consistently.</p>
+</section>
+<section id="model-selection" class="level2">
+<h2 data-anchor-id="model-selection">Model Selection</h2>
+<p>A range of supervised machine learning algorithms were selected to address both regression (continuous provider hours) and classification (categories of provider hours) tasks. Models were selected based on their suitability for handling high-dimensional, tabular datasets like electronic health records (EHRs) and informed by the research shared so far <span class="citation" data-cites="garriga2022 wang2021 sheetal2023">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>; <a href="#ref-sheetal2023" role="doc-biblioref">Sheetal et al., 2023</a>; <a href="#ref-wang2021" role="doc-biblioref">Wang et al., 2021</a>)</span>.</p>
+<p>Random Forest (RF) is an ensemble learning method that constructs multiple decision trees during training and outputs either the most common classifications or the average predictions from individual trees. RF was chosen for its ability to handle large datasets with numerous features, effectively manage missing data, and capture complex, non-linear relationships. Its built-in feature importance metrics also enhance interpretability, making it a strong candidate for understanding which variables drive predictions <span class="citation" data-cites="an2023a">(<a href="#ref-an2023a" role="doc-biblioref">An et al., 2023</a>)</span>.</p>
+<p>XGBoost, a highly efficient implementation of gradient boosting machines (GBMs), was selected due to its superior predictive accuracy, scalability, and ability to handle sparse datasets with missing values. Gradient boosting combines weak learners (typically decision trees) iteratively, optimizing for residual errors at each step to minimize a specified loss function. XGBoost’s regularization techniques, such as shrinkage and column sampling, help prevent overfitting, while its computational efficiency makes it well-suited for large datasets <span class="citation" data-cites="an2023a">(<a href="#ref-an2023a" role="doc-biblioref">An et al., 2023</a>)</span>.</p>
+<p>Feed-forward neural networks (FNNs), a class of deep learning models, were included for their flexibility in modelling complex non-linear interactions among variables. FNNs consist of interconnected layers of nodes, each applying an activation function to transform input data. These networks are particularly useful when relationships between variables are intricate and not easily captured by tree-based methods <span class="citation" data-cites="su2020">(<a href="#ref-su2020" role="doc-biblioref">Su et al., 2020</a>)</span>.</p>
+<p>Recurrent neural networks (RNNs) were added to leverage the sequential nature of the dataset. Unlike FNNs, RNNs include recurrent connections that allow the model to retain information about previous inputs, enabling it to capture temporal dependencies in time-series data. This makes RNNs particularly well-suited for tasks where past events influence future outcomes, such as predicting changes in weekly provider workload based on prior patterns <span class="citation" data-cites="dabas2024 su2020">(<a href="#ref-dabas2024" role="doc-biblioref">Dabas, 2024</a>; <a href="#ref-su2020" role="doc-biblioref">Su et al., 2020</a>)</span>.</p>
+<p>Furthermore, informed by <span class="citation" data-cites="garriga2022">Garriga et al. (<a href="#ref-garriga2022" role="doc-biblioref">2022</a>)</span>, a baseline model will be implemented to replicate how new clients are typically assigned in agencies without sophisticated case-mix algorithms. The baseline will rely on a simplified feature set containing the programming the client is accessing (i.e., brief service versus counselling and therapy or crisis intervention) and their age. By evaluating all of the models against this baseline, we can better estimate whether machine learning approaches offer any improvement over traditional methods of estimating provider workload and assigning new clients.</p>
+<p>Each model will be trained on the same training set and evaluated using identical cross-validation splits to ensure consistency in comparisons. Hyperparameter optimization will be conducted for all algorithms, with 100 trials per model, focusing on minimizing Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE) for regression tasks and maximizing the Area Under the Curve (AUC) for classification tasks. Specific metrics may vary depending on the model and outcome being evaluated. However, all of these choices and the resulting metrics will be shared in the final thesis.</p>
+</section>
+<section id="validation-and-testing" class="level2">
+<h2 data-anchor-id="validation-and-testing">Validation and Testing</h2>
+<p>All models will be compared against the baseline and one another to assess relative performance across both regression and classification tasks. The supplementary materials will document detailed hyperparameter search spaces and tuning procedures. <span class="citation" data-cites="salditt2023 sheetal2023">(<a href="#ref-salditt2023" role="doc-biblioref">Salditt et al., 2023</a>; <a href="#ref-sheetal2023" role="doc-biblioref">Sheetal et al., 2023</a>)</span>.</p>
+<p>Final models will be statistically compared and evaluated on the test set using appropriate performance metrics depending on whether it is a regression task (mean absolute error or root mean squared error) or classification task (accuracy, precision, recall and area under the curve). The evaluations will help determine each model’s accuracy, generalizability and robustness <span class="citation" data-cites="salditt2023 wang2021">(<a href="#ref-salditt2023" role="doc-biblioref">Salditt et al., 2023</a>; <a href="#ref-wang2021" role="doc-biblioref">Wang et al., 2021</a>)</span>. Final models will also be analyzed to identify which predictors were the most important in terms of estimating client-related work.</p>
+<p>Furthermore, to enhance the interpretability and transparency of our models, we plan to implement SHapley Additive exPlanations (SHAP) for feature analysis <span class="citation" data-cites="lundberg">(<a href="#ref-lundberg" role="doc-biblioref">Lundberg &amp; Lee, 2017</a>)</span>. SHAP is a method that helps quantify the contribution of each feature to the model’s predictions, providing insights into how specific client characteristics and historical data points influence predicted weekly clinician hours. Interpretability is essential in a mental health care setting, as decisions directly impact client care and resource allocation <span class="citation" data-cites="feretzakis2024">(<a href="#ref-feretzakis2024" role="doc-biblioref">Feretzakis et al., 2024</a>)</span>. Clinicians and administrators need to understand not only the predicted workload but also the driving factors behind each prediction to ensure fair, personalized, and transparent decision-making. For instance, if certain factors like recent diagnoses or patterns of no-shows are highly influential, this can guide intervention strategies and inform staffing decisions tailored to client needs. SHAP’s ability to provide such detailed, interpretable explanations makes it a critical tool for ensuring that the model’s predictions are aligned with clinical understanding and ethical care practices <span class="citation" data-cites="feretzakis2024">(<a href="#ref-feretzakis2024" role="doc-biblioref">Feretzakis et al., 2024</a>)</span>.</p>
+</section>
+<section id="software-and-tools" class="level2">
+<h2 data-anchor-id="software-and-tools">Software and Tools</h2>
+<p>Python will be used as the primary programming language for model development and evaluation with support from R Statistical Software <span class="citation" data-cites="vanrossum1995">(<a href="#ref-vanrossum1995" role="doc-biblioref">Van Rossum &amp; Drake, 1995</a>)</span>. Quarto Markdown will facilitate documentation and ensure reproducibility, with all workflows executed within the Positron IDE environment <span class="citation" data-cites="positron2024">(<a href="#ref-positron2024" role="doc-biblioref"><em>Positron</em>, 2024</a>)</span>. Positron is a next-generation data science integrated development environment (IDE) developed by Posit PBC. It is built on Code OSS and designed to support multiple programming languages, including R and Python, providing an extensible and familiar environment for reproducible authoring and publishing <span class="citation" data-cites="positron2024">(<a href="#ref-positron2024" role="doc-biblioref"><em>Positron</em>, 2024</a>)</span>.</p>
+</section>
+</section>
+<section id="limitations-and-challenges" class="level1">
+<h1>Limitations and Challenges</h1>
+<p>While our aim is to test the feasibility of modelling EHRs with machine learning to produce reliable estimates of client-related work based on individual client needs, several limitations must be acknowledged. First, the data is derived from a specific subset of the population—young people with mental health concerns in a community outpatient setting in northern Ontario—which may limit the generalizability of our findings to other demographics, communities or healthcare environments. Additionally, while machine learning techniques address the complexity of EHR data, these methods are not immune to biases inherent in the data itself <span class="citation" data-cites="garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>)</span>. Systematic issues in data collection, such as underreporting, data entry errors, or misclassification, could potentially impact the accuracy and reliability of the model’s predictions. Additionally, assessment scores may be influenced by the subjective interpretation of the provider who administered the assessment. While we will attempt to reduce these issues, there is no guarantee that all biases can be fully mitigated.</p>
+<p>Another limitation is the exclusion of provider-side variables from our models. This decision is intended to maximize fairness in case allocation, given that such data is typically unavailable in the EHR for new clients <span class="citation" data-cites="tran2019 wang2021">(<a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>; <a href="#ref-wang2021" role="doc-biblioref">Wang et al., 2021</a>)</span>. However, omitting provider IDs and characteristics such as clinical experience or preferred modality may overlook factors that significantly influence the hours a provider spends with each client <span class="citation" data-cites="tran2019">(<a href="#ref-tran2019" role="doc-biblioref">Tran et al., 2019</a>)</span>. This exclusion could reduce the comprehensiveness and accuracy of workload predictions. However, future plans could explore including provider-side variables to control for the impact that providers have on the time spent servicing each case.</p>
+<p>Moreover, this study does not address the distinction between actual workload—quantifiable hours spent on direct and indirect services—and perceived workload, which reflects a provider’s subjective assessment of their caseload demands <span class="citation" data-cites="king2004 king2009">(<a href="#ref-king2004" role="doc-biblioref">King et al., 2004</a>; <a href="#ref-king2009" role="doc-biblioref">King, 2009</a>)</span>. For example, two providers with similar actual workloads may perceive their workload differently due to factors such as stress, time management skills, or case complexity. Incorporating a feedback loop to capture staff perceptions of work, potentially through a weekly or monthly “caseload satisfaction” measure, could help bridge this gap by allowing the model to account for discrepancies between objective measures and subjective experiences, providing a better understanding of how provider characteristics and perceptions influence workload dynamics, provider burnout and resource utilization <span class="citation" data-cites="king2009">(<a href="#ref-king2009" role="doc-biblioref">King, 2009</a>)</span>.</p>
+<p>Finally, while predictive accuracy and interpretability are crucial, a follow-up study will be necessary to evaluate how effectively the final model supports clinical decision-making in practice <span class="citation" data-cites="garriga2022">(<a href="#ref-garriga2022" role="doc-biblioref">Garriga et al., 2022</a>)</span>. Such a study would allow us to track how predictions influence clinician workload distribution, clinicians perceived workload and client outcomes over time, providing a clearer understanding of its practical benefits and potential drawbacks in a live clinical setting. <span class="citation" data-cites="garriga2022">Garriga et al. (<a href="#ref-garriga2022" role="doc-biblioref">2022</a>)</span> demonstrated this approach, showing that prospective cohort studies can offer insights into a model’s impact on workflow, clinician satisfaction, and client care quality. In future research, implementing this step could help validate the final model’s usefulness and refine it for improved applicability in mental health care settings.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>The proposed study will take a significant step toward developing a data-driven approach to workload management in community-based child and youth mental health services. By leveraging EHRs with machine learning, the research will test the feasibility of using predictive models to estimate clinician workload with historical and real-time client data. Through rigorous methodology—including transparent feature engineering, time-based cross-validation, and a comparative analysis of multiple machine learning algorithms—the study aims to generate individualized estimates of client-related work while ensuring interpretability and ethical relevance.</p>
+<p>Central to this effort is a commitment to transparency, achieved through techniques such as SHAP (SHapley Additive exPlanations) to interpret model predictions <span class="citation" data-cites="lundberg">(<a href="#ref-lundberg" role="doc-biblioref">Lundberg &amp; Lee, 2017</a>)</span>; techniques that maximize the likelihood that predictions are not only clinically relevant but trusted by clinical decision-makers <span class="citation" data-cites="lundberg">(<a href="#ref-lundberg" role="doc-biblioref">Lundberg &amp; Lee, 2017</a>)</span>. By bridging the gap between advanced machine learning methods and practical applications in mental health care, the study directly supports the broader goal of improving outcomes for clients and the clinicians who care for them <span class="citation" data-cites="feretzakis2024">(<a href="#ref-feretzakis2024" role="doc-biblioref">Feretzakis et al., 2024</a>)</span>.</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<!-- References will auto-populate in the refs div below -->
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-aminizadeh2023" class="csl-entry" role="listitem">
+Aminizadeh, S., Heidari, A., Toumaj, S., Darbandi, M., Navimipour, N. J., Rezaei, M., Talebi, S., Azad, P., &amp; Unal, M. (2023). The applications of machine learning techniques in medical data processing based on distributed computing and the internet of things. <em>Computer Methods and Programs in Biomedicine</em>, <em>241</em>, 107745. <a href="https://doi.org/10.1016/j.cmpb.2023.107745">https://doi.org/10.1016/j.cmpb.2023.107745</a>
+</div>
+<div id="ref-an2023a" class="csl-entry" role="listitem">
+An, Q., Rahman, S., Zhou, J., &amp; Kang, J. J. (2023). A comprehensive review on machine learning in healthcare industry: classification, restrictions, opportunities and challenges. <em>Sensors</em>, <em>23</em>(9), 4178. <a href="https://doi.org/10.3390/s23094178">https://doi.org/10.3390/s23094178</a>
+</div>
+<div id="ref-officeoftheauditorgeneralofontario2016" class="csl-entry" role="listitem">
+Auditor General of Ontario. (2016). <em>Office of the Auditor General Annual Report</em> (pp. 110–147). Ministry of Children; Youth Services. <a href="https://www.auditor.on.ca/en/content/annualreports/arreports/en16/v1_301en16.pdf">https://www.auditor.on.ca/en/content/annualreports/arreports/en16/v1_301en16.pdf</a>
+</div>
+<div id="ref-officeoftheauditorgeneralofontario2018" class="csl-entry" role="listitem">
+Auditor General of Ontario. (2018). <em>Child and Youth Mental Health Follow-Up Report</em> (pp. 14–28). Ministry of Children, Community; Social Services. <a href="https://www.auditor.on.ca/en/content/annualreports/arreports/en18/v2_101en18.pdf">https://www.auditor.on.ca/en/content/annualreports/arreports/en18/v2_101en18.pdf</a>
+</div>
+<div id="ref-baillon2009" class="csl-entry" role="listitem">
+Baillon, S. F., Simpson, R. G., Poole, N. J., Colledge, R. J., Taub, N. A., &amp; Prettyman, R. J. (2009). The development of a scale to aid caseload weighting in a community mental health team for older people. <em>Journal of Mental Health</em>, <em>18</em>(3), 253–261. <a href="https://doi.org/10.1080/09638230802522981">https://doi.org/10.1080/09638230802522981</a>
+</div>
+<div id="ref-chen2023" class="csl-entry" role="listitem">
+Chen, X., Chen, H., Nan, S., Kong, X., Duan, H., &amp; Zhu, H. (2023). Dealing with missing, imbalanced, and sparse features during the development of a prediction model for sudden death using emergency medicine data: Machine learning approach. <em>JMIR Medical Informatics</em>, <em>11</em>, e38590. <a href="https://doi.org/10.2196/38590">https://doi.org/10.2196/38590</a>
+</div>
+<div id="ref-cmho2019" class="csl-entry" role="listitem">
+CMHO. (2019). <em>Developing caseload/workload guidelines for ontario’s child and youth mental health sector</em>. Children’s Mental Health Ontario. <a href="https://iknow-oce.esolutionsgroup.ca/api/ServiceItem/GetDocument?clientId=A1B5AA8F-88A1-4688-83F8-FF0A5B083EF3&amp;documentId=6aeb8d26-16ac-4353-b49c-c21b131b735c">https://iknow-oce.esolutionsgroup.ca/api/ServiceItem/GetDocument?clientId=A1B5AA8F-88A1-4688-83F8-FF0A5B083EF3&amp;documentId=6aeb8d26-16ac-4353-b49c-c21b131b735c</a>
+</div>
+<div id="ref-childrensmentalhealthontario2020" class="csl-entry" role="listitem">
+CMHO. (2020). <em>Kids can’t wait: Report on waitlists and wait times for child and youth mental health care in ontario</em>. Children’s Mental Health Ontario. <a href="https://cmho.org/wp-content/uploads/CMHO-Report-WaitTimes-2020.pdf">https://cmho.org/wp-content/uploads/CMHO-Report-WaitTimes-2020.pdf</a>
+</div>
+<div id="ref-childrensmentalhealthontario2022" class="csl-entry" role="listitem">
+CMHO. (2022). <em>Addressing urgent workforce challenges in child and youth mental health</em>. Children’s Mental Health Ontario. <a href="https://cmho.org/wp-content/uploads/CMHO-Workforce-FINAL.pdf">https://cmho.org/wp-content/uploads/CMHO-Workforce-FINAL.pdf</a>
+</div>
+<div id="ref-comeau2019" class="csl-entry" role="listitem">
+Comeau, J., Georgiades, K., Duncan, L., Wang, L., &amp; Boyle, M. H. (2019). Changes in the prevalence of child and youth mental disorders and perceived need for professional help between 1983 and 2014: Evidence from the ontario child health study. <em>The Canadian Journal of Psychiatry</em>, <em>64</em>(4), 256–264. <a href="https://doi.org/10.1177/0706743719830035">https://doi.org/10.1177/0706743719830035</a>
+</div>
+<div id="ref-cymhlac2019" class="csl-entry" role="listitem">
+CYMHLAC. (2019). <em>Realizing the potential: Strengthening the ontario mental health system for children, youth and their families</em>. Child &amp; Youth Mental Health Lead Agency Consortium. <a href="https://www.neofacs.org/files/Realizing-the-Potential-2018-2019-Provincial-Priorities-Report-EN-web-1.pdf">https://www.neofacs.org/files/Realizing-the-Potential-2018-2019-Provincial-Priorities-Report-EN-web-1.pdf</a>
+</div>
+<div id="ref-dabas2024" class="csl-entry" role="listitem">
+Dabas, A. (2024). <em>Application of recurrent neural networks (RNNs) in medical diagnostics</em>. <a href="https://hal.science/hal-04670386">https://hal.science/hal-04670386</a>
+</div>
+<div id="ref-feretzakis2024" class="csl-entry" role="listitem">
+Feretzakis, G., Sakagianni, A., Anastasiou, A., Kapogianni, I., Bazakidou, E., Koufopoulos, P., Koumpouros, Y., Koufopoulou, C., Kaldis, V., &amp; Verykios, V. S. (2024). Integrating Shapley Values into Machine Learning Techniques for Enhanced Predictions of Hospital Admissions. <em>Applied Sciences</em>, <em>14</em>(13), 5925. <a href="https://doi.org/10.3390/app14135925">https://doi.org/10.3390/app14135925</a>
+</div>
+<div id="ref-garriga2022" class="csl-entry" role="listitem">
+Garriga, R., Mas, J., Abraha, S., Nolan, J., Harrison, O., Tadros, G., &amp; Matic, A. (2022). Machine learning model to predict mental health crises from electronic health records. <em>Nature Medicine</em>, <em>28</em>(6), 1240–1248. <a href="https://doi.org/10.1038/s41591-022-01811-5">https://doi.org/10.1038/s41591-022-01811-5</a>
+</div>
+<div id="ref-johnson1998" class="csl-entry" role="listitem">
+Johnson, L. M., Richards, J., Pink, G. H., &amp; Campbell, L. (1998). <em>Case-Mix Tools for Decision Making in Healthcare</em>. Canadian Institute for Health Information. <a href="https://secure.cihi.ca/free_products/Case_Mix_Tools_e.pdf">https://secure.cihi.ca/free_products/Case_Mix_Tools_e.pdf</a>
+</div>
+<div id="ref-king2009" class="csl-entry" role="listitem">
+King, R. (2009). Caseload management, work-related stress and case manager self-efficacy among victorian mental health case managers. <em>The Australian and New Zealand Journal of Psychiatry</em>, <em>43</em>(5), 453–459. <a href="https://doi.org/10.1080/00048670902817661">https://doi.org/10.1080/00048670902817661</a>
+</div>
+<div id="ref-king2000" class="csl-entry" role="listitem">
+King, R., Le Bas, J., &amp; Spooner, D. (2000). The impact of caseload on the personal efficacy of mental health case managers. <em>Psychiatric Services</em>, <em>51</em>(3), 364–368. <a href="https://doi.org/10.1176/appi.ps.51.3.364">https://doi.org/10.1176/appi.ps.51.3.364</a>
+</div>
+<div id="ref-king2004" class="csl-entry" role="listitem">
+King, R., Meadows, G., &amp; Le Bas, J. (2004). Compiling a caseload index for mental health case management. <em>The Australian and New Zealand Journal of Psychiatry</em>, <em>38</em>, 455–462. <a href="https://doi.org/10.1111/j.1440-1614.2004.01388.x">https://doi.org/10.1111/j.1440-1614.2004.01388.x</a>
+</div>
+<div id="ref-kinreich2021" class="csl-entry" role="listitem">
+Kinreich, S., McCutcheon, V. V., Aliev, F., Meyers, J. L., Kamarajan, C., Pandey, A. K., Chorlian, D. B., Zhang, J., Kuang, W., Pandey, G., Viteri, S. S.-S. de, Francis, M. W., Chan, G., Bourdon, J. L., Dick, D. M., Anokhin, A. P., Bauer, L., Hesselbrock, V., Schuckit, M. A., … Porjesz, B. (2021). Predicting alcohol use disorder remission: a longitudinal multimodal multi-featured machine learning approach. <em>Translational Psychiatry</em>, <em>11</em>(1), 1–10. <a href="https://doi.org/10.1038/s41398-021-01281-2">https://doi.org/10.1038/s41398-021-01281-2</a>
+</div>
+<div id="ref-lundberg" class="csl-entry" role="listitem">
+Lundberg, S., &amp; Lee, S.-I. (2017). <em>A unified approach to interpreting model predictions</em>. <a href="https://doi.org/10.48550/arXiv.1705.07874">https://doi.org/10.48550/arXiv.1705.07874</a>
+</div>
+<div id="ref-martin2020" class="csl-entry" role="listitem">
+Martin, P., Davies, R., Macdougall, A., Ritchie, B., Vostanis, P., Whale, A., &amp; Wolpert, M. (2020). Developing a case mix classification for child and adolescent mental health services: The influence of presenting problems, complexity factors and service providers on number of appointments. <em>Journal of Mental Health (Abingdon, England)</em>, <em>29</em>(4), 431–438. <a href="https://doi.org/10.1080/09638237.2017.1370631">https://doi.org/10.1080/09638237.2017.1370631</a>
+</div>
+<div id="ref-rightsocr2012" class="csl-entry" role="listitem">
+OCR. (2012). <em>Guidance regarding methods for de-identification of protected health information in accordance with the health insurance portability and accountability act (HIPAA) privacy rule</em>. U.S. Department of Health; Human Services. <a href="https://www.hhs.gov/hipaa/for-professionals/privacy/special-topics/de-identification/index.html">https://www.hhs.gov/hipaa/for-professionals/privacy/special-topics/de-identification/index.html</a>
+</div>
+<div id="ref-positron2024" class="csl-entry" role="listitem">
+<em>Positron</em>. (2024). posit-dev. <a href="https://github.com/posit-dev/positron">https://github.com/posit-dev/positron</a>
+</div>
+<div id="ref-salditt2023" class="csl-entry" role="listitem">
+Salditt, M., Humberg, S., &amp; Nestler, S. (2023). Gradient tree boosting for hierarchical data. <em>Multivariate Behavioral Research</em>, <em>58</em>(5), 911–937. <a href="https://doi.org/10.1080/00273171.2022.2146638">https://doi.org/10.1080/00273171.2022.2146638</a>
+</div>
+<div id="ref-sheetal2023" class="csl-entry" role="listitem">
+Sheetal, A., Jiang, Z., &amp; Di Milia, L. (2023). Using machine learning to analyze longitudinal data: A tutorial guide and best-practice recommendations for social science researchers. <em>Applied Psychology</em>, <em>72</em>(3), 1339–1364. <a href="https://doi.org/10.1111/apps.12435">https://doi.org/10.1111/apps.12435</a>
+</div>
+<div id="ref-simon2018" class="csl-entry" role="listitem">
+Simon, G. E., Johnson, E., Lawrence, J. M., Rossom, R. C., Ahmedani, B., Lynch, F. L., Beck, A., Waitzfelder, B., Ziebell, R., Penfold, R. B., &amp; Shortreed, S. M. (2018). Predicting Suicide Attempts and Suicide Deaths Following Outpatient Visits Using Electronic Health Records. <em>The American Journal of Psychiatry</em>, <em>175</em>(10), 951–960. <a href="https://doi.org/10.1176/appi.ajp.2018.17101167">https://doi.org/10.1176/appi.ajp.2018.17101167</a>
+</div>
+<div id="ref-su2020" class="csl-entry" role="listitem">
+Su, C., Xu, Z., Pathak, J., &amp; Wang, F. (2020). Deep learning in mental health outcome research: a scoping review. <em>Translational Psychiatry</em>, <em>10</em>(1), 1–26. <a href="https://doi.org/10.1038/s41398-020-0780-3">https://doi.org/10.1038/s41398-020-0780-3</a>
+</div>
+<div id="ref-tran2019" class="csl-entry" role="listitem">
+Tran, N., Poss, J. W., Perlman, C., &amp; Hirdes, J. P. (2019). Case-mix classification for mental health care in community settings: A scoping review. <em>Health Services Insights</em>, <em>12</em>, 1178632919862248. <a href="https://doi.org/10.1177/1178632919862248">https://doi.org/10.1177/1178632919862248</a>
+</div>
+<div id="ref-vanrossum1995" class="csl-entry" role="listitem">
+Van Rossum, G., &amp; Drake, F. (1995). <em>Python reference manual</em>. Centrum voor Wiskunde en Informatica Amsterdam.
+</div>
+<div id="ref-walsh2017" class="csl-entry" role="listitem">
+Walsh, C. G., Ribeiro, J. D., &amp; Franklin, J. C. (2017). Predicting Risk of Suicide Attempts Over Time Through Machine Learning. <em>Clinical Psychological Science</em>, <em>5</em>(3), 457–469. <a href="https://doi.org/10.1177/2167702617691560">https://doi.org/10.1177/2167702617691560</a>
+</div>
+<div id="ref-wang2021" class="csl-entry" role="listitem">
+Wang, X., Blumenthal, H. J., Hoffman, D., Benda, N., Kim, T., Perry, S., Franklin, E. S., Roth, E. M., Hettinger, A. Z., &amp; Bisantz, A. M. (2021). Modeling patient-related workload in the emergency department using electronic health record data. <em>International Journal of Medical Informatics</em>, <em>150</em>, 104451. <a href="https://doi.org/10.1016/j.ijmedinf.2021.104451">https://doi.org/10.1016/j.ijmedinf.2021.104451</a>
+</div>
+<div id="ref-worldme2022" class="csl-entry" role="listitem">
+WHO. (2022). <em>World Mental Health Report: Transforming Mental Health for All</em> (p. 58). World Health Organization.
+</div>
+<div id="ref-xiao2018" class="csl-entry" role="listitem">
+Xiao, C., Choi, E., &amp; Sun, J. (2018). Opportunities and challenges in developing deep learning models using electronic health records data: A systematic review. <em>Journal of the American Medical Informatics Association</em>, <em>25</em>(10), 1419–1428. <a href="https://doi.org/10.1093/jamia/ocy068">https://doi.org/10.1093/jamia/ocy068</a>
+</div>
+</div>
+</section>
+<section id="section" class="level1">
+<h1></h1>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
