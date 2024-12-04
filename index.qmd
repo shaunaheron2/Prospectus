@@ -71,8 +71,8 @@ format:
   apaquarto-html:
       comments:
         hypothesis: true
-  apaquarto-docx: default
-  apaquarto-pdf:  default
+ # apaquarto-docx: default
+ # apaquarto-pdf:  default
 ---
 
 ```{r}
@@ -327,13 +327,13 @@ Another limitation is the exclusion of provider-side variables from our models. 
 
 Moreover, this study does not address the distinction between actual workload—quantifiable hours spent on direct and indirect services—and perceived workload, which reflects a provider's subjective assessment of their caseload demands [@king2004; @king2009]. For example, two providers with similar actual workloads may perceive their workload differently due to factors such as stress, time management skills, or case complexity. Incorporating a feedback loop to capture staff perceptions of work, potentially through a weekly or monthly "caseload satisfaction" measure, could help bridge this gap by allowing the model to account for discrepancies between objective measures and subjective experiences, providing a better understanding of how provider characteristics and perceptions influence workload dynamics, provider burnout and resource utilization [@king2009].
 
-Finally, while predictive accuracy and interpretability are crucial, a follow-up study will be necessary to evaluate how effectively the final model supports clinical decision-making in practice [@garriga2023]. Such a study would allow us to track how predictions influence clinician workload distribution, clinicians perceived workload and client outcomes over time, providing a clearer understanding of its practical benefits and potential drawbacks in a live clinical setting. @garriga2022 demonstrated this approach, showing that prospective cohort studies can offer insights into a model’s impact on workflow, clinician satisfaction, and client care quality. In future research, implementing this step could help validate the final model’s usefulness and refine it for improved applicability in mental health care settings.
+Finally, while predictive accuracy and interpretability are crucial, a follow-up study will be necessary to evaluate how effectively the final model supports clinical decision-making in practice [@garriga2022]. Such a study would allow us to track how predictions influence clinician workload distribution, clinicians perceived workload and client outcomes over time, providing a clearer understanding of its practical benefits and potential drawbacks in a live clinical setting. @garriga2022 demonstrated this approach, showing that prospective cohort studies can offer insights into a model’s impact on workflow, clinician satisfaction, and client care quality. In future research, implementing this step could help validate the final model’s usefulness and refine it for improved applicability in mental health care settings.
 
 # Conclusion
 
-In conclusion, we believe the proposed study will be a significant contribution toward developing data-driven approaches to workload management in community-based child and youth mental health services. By leveraging EHRs with machine learning, this research tests the feasibility of using predictive models to estimate clinician workload with historical and real-time client data. Through rigorous methodology—including transparent feature engineering, time-based cross-validation, and a comparative analysis of multiple machine learning algorithms—this study aims to extend prior research in the medical domain to the mental health domain while ensuring interpretability and ethical relevance.
+The proposed study will take a significant step toward developing a data-driven approach to workload management in community-based child and youth mental health services. By leveraging EHRs with machine learning, the research will test the feasibility of using predictive models to estimate clinician workload with historical and real-time client data. Through rigorous methodology—including transparent feature engineering, time-based cross-validation, and a comparative analysis of multiple machine learning algorithms—the study aims to generate individualized estimates of client-related work while ensuring interpretability and ethical relevance.
 
-Central to this effort is a commitment to transparency, achieved through techniques such as SHAP (SHapley Additive exPlanations) to interpret model predictions [@lundberg]. These techniques maximize the likelihood that predictions are not only clinically relevant but also trusted by clinical decision-makers [@lundberg]. By bridging the gap between advanced machine learning methods and practical applications in mental health care, this study directly supports the broader goal of improving outcomes for clients and the clinicians who care for them [@feretzakis2024].
+Central to this effort is a commitment to transparency, achieved through techniques such as SHAP (SHapley Additive exPlanations) to interpret model predictions [@lundberg]; techniques that maximize the likelihood that predictions are not only clinically relevant but trusted by clinical decision-makers [@lundberg]. By bridging the gap between advanced machine learning methods and practical applications in mental health care, the study directly supports the broader goal of improving outcomes for clients and the clinicians who care for them [@feretzakis2024].
 
 # References
 
