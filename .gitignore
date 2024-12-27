@@ -9,6 +9,6 @@ scrap*.*
 .quarto
 
 /.quarto/
-~$Predictors.xlsx
+
 
 /.luarc.json
