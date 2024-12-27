@@ -60,7 +60,7 @@ author-note:
     financial-support: ~
     gratitude: ~
     authorship-agreements: ~
-abstract: "As child and youth mental health (CYMH) providers face increasing service demands, anticipating and optimizing staff caseloads is critical to maintaining provider well-being and delivering equitable, high-quality care. However, there are a lack of efficient and reliable tools to support this decision-making in a way that accounts for variable client need and is cost-effective and fair. Manual review of client records, necessary to fairly and efficiently allocate new clients and monitor existing caseloads, is untenable in the face of the same workforce shortages. With this gap in mind, we propose examining the utility of leveraging machine learning algorithms trained on electronic mental health records (EHRs) to estimate the number of provider hours a client may require in the coming weeks. Specific objectives include: (i) identifying the features that best predict client-related provider hours from structured demographic, administrative and assessment EHRs at the earliest stages of client contact (i.e., intake screener scores) and at weekly intervals throughout treatment (i.e., aggregated visit counts,  days since the last contact); ii) compare tree-based and neural network machine learning algorithms in their ability to predict client-related provider hours; iii) compare the utility of modelling a continuous index of needed provider hours compared to a classification of the same (i.e., low, medium, high); (iv) conduct interpretability analyses to identify and explain the contributions of individual features to model predictions."
+abstract: "As child and youth mental health (CYMH) providers face increasing service demands, anticipating and optimizing staff caseloads is critical to maintaining provider well-being and delivering equitable, high-quality care. However, there are a lack of efficient and reliable tools to support this decision-making in a way that accounts for variable client need and at the same time is cost-effective and fair. Manual review of client records, necessary to fairly and efficiently allocate new clients and monitor existing caseloads, is untenable in the face of the same workforce shortages. With this gap in mind, we propose examining the utility of leveraging machine learning algorithms trained on electronic mental health records (EHRs) to estimate the number of provider hours a client may require in the coming weeks. Specific objectives include: (i) identifying the features that best predict client-related provider hours from structured demographic, administrative and assessment EHRs at the earliest stages of client contact (i.e., intake screener scores) and at weekly intervals throughout treatment (i.e., aggregated visit counts,  days since the last contact); ii) compare tree-based and neural network machine learning algorithms in their ability to predict client-related provider hours; iii) compare the utility of modelling a continuous index of needed provider hours compared to a classification of the same (i.e., low, medium, high); (iv) conduct interpretability analyses to identify and explain the contributions of individual features to model predictions."
 language: 
   citation-last-author-separator: "&"
 floatsintext: true
@@ -71,8 +71,8 @@ format:
   apaquarto-html:
       comments:
         hypothesis: true
-#  apaquarto-docx: default
- # apaquarto-pdf:  default
+  apaquarto-docx: default
+  apaquarto-pdf:  default
 ---
 
 ```{r}

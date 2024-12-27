@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.33">
+
+  <title>Beyond Counting Clients</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-077ed0fd3b2b6c9aff5defd058debd56.css">
+  <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <link href="../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+  <script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+  <script src="../site_libs/viz-1.8.2/viz.js"></script>
+
+  <link href="../site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+
+  <script src="../site_libs/grViz-binding-1.0.11/grViz.js"></script>
+
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Beyond Counting Clients</h1>
+  <p class="subtitle">Modeling a Measure of Clinician Workload with Machine Learning</p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section class="slide level2">
+
+<div class="cell hidden">
+<div class="sourceCode cell-code hidden" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co">#| echo: false</span></span>
+<span id="cb1-2"><a></a></span>
+<span id="cb1-3"><a></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr hidden">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code hidden" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co">#| echo: false</span></span>
+<span id="cb3-2"><a></a></span>
+<span id="cb3-3"><a></a><span class="fu">library</span>(DiagrammeR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="statement-of-problem" class="slide level2">
+<h2>Statement of Problem</h2>
+<div class="columns">
+<div class="column" style="width:70%;">
+<div>
+<ul>
+<li class="fragment"><p>Providers reporting maxed caseloads</p></li>
+<li class="fragment"><p>case complexity increasing over time</p></li>
+<li class="fragment"><p>long waitlists for service</p></li>
+<li class="fragment"><p>at the same time, caseloads at historic lows</p></li>
+</ul>
+</div>
+</div><div class="column" style="width:30%;">
+<p>Right column</p>
+</div></div>
+<aside class="notes">
+<p>quantify the weight of cases to account for the reported increased complexity and find a way to determine who has the capacity to be assigned more youth.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="workload-vs-caseload-vs-caseweight" class="slide level2">
+<h2>Workload vs Caseload vs Caseweight</h2>
+<p><strong>Caseload</strong> refers to the number of clients assigned to a worker at any given time.</p>
+<p><strong>Workload</strong> refers to the amount of time a provider spends on a case.</p>
+<p><strong>Caseweight</strong> is a measure of client-related workload; in other words, the time required to support a client thats impacts the absolute number of clients a provider can support within their caseload. This will serve as our dependent variable.</p>
+<aside class="notes">
+<p>Traditionally, Compass used caseloads to determine whether a provider could support additional youth. Explain why bad</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="provider-time-as-a-measure-of-workload" class="slide level2">
+<h2>Provider Time as a Measure of Workload</h2>
+<ul>
+<li class="fragment"><p>Direct Time</p></li>
+<li class="fragment"><p>Non-Direct Time</p></li>
+<li class="fragment"><p>Non-Client Related Time</p></li>
+</ul>
+<aside class="notes">
+<p>The other major method of assessing workload is looking at worker’s time.</p>
+<p>At Compass staff have to enter their entire days in the client information system. This type of approach was suggested by the Knowledge Institute on Child and Youth Mental Health and Addictions when they were trying to examine how to develop caseload/workload guidelines. At Compass we built dashboard that provides leaders information on staff time on a weekly basis.</p>
+<p>So things seem straightforward enough. We can use client’s clinical assessment data and staff’s time entry data to build an algorithm that predicts the number of hours a client requires per week (we call this the caseweight). However, as we begun doing some data exploration we encountered a bit of a dilemma.</p>
+<p>Because worker’s must to input all their time, there is never really “empty space” that a new client could fill. So we looked at our broad time entry categories. There is direct time which we defined as any time spent with the client or their caregivers, non-direct time which is in-service of clients but involves work like documentation or case management and lastly we have non-client related time which is not attributable to specific clients so things like agency meetings and training.</p>
+<p>We noticed is that staff seemed to input non-direct time and non-client related time inconsistently. We realized that acted kind of like a gas. It would expand or compress based on the worker’s available time.</p>
+<p>In discussion we believed direct time would in our setting have the strongest most direct relationship to staff’s overall workload and client need and would be less prone to over-reporting.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="existing-case-management-algorithms" class="slide level2">
+<h2>Existing Case Management Algorithms</h2>
+<ul>
+<li class="fragment">often used to evaluate total cost of an episode of care (e.g.&nbsp;total number of appointments, or total days the file is open)</li>
+<li class="fragment">others use proxies for service utilization like the number of services provided or the number of different types of services; which could be related but it distinct from workload</li>
+<li class="fragment">other tools can distinguish between levels of care but do not necessarily account for the workload involved in a specific level of care</li>
+</ul>
+<aside class="notes">
+<p>While several case management algorithms exist, they come with a number of limitations - often used to evaluate total cost of an episode of care (e.g.&nbsp;total number of appointments, or total days the file is open) - others use proxies for service utilization like the number of services provided or the number of different types of services; which could be related but it distinct from workload - other tools can distinguish between levels of care but do not necessarily account for the workload involved in a specific level of care</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="research-question" class="slide level2">
+<h2>Research Question</h2>
+<p>Can a machine learning model trained on client data usefully predict the caseweight of a new intake?</p>
+</section>
+<section id="informant-study" class="slide level2">
+<h2>Informant Study</h2>
+<p>Wang et al.&nbsp;(2020) found via linear regression proved that the indicators explained a substantial amount of variance of the proxies (four out of five proxies were modeled with R2 &gt; 0.80). Classification algorithms also showed success in classifying a patient as having high or low task demand</p>
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<p>Efforts has been made on improving patient assignment at triage to improve clinician workload management. o Data contained within the EHR have the potential to support automatic patient-related workload prediction. o Using indicators that are available in the EHR data, one can potentiallypredict patient-related workload at the early stage of patientvisit and update the prediction as the visit proceeds. o The predicted workload can potentially be used in assigning new patients to clinicians in a way that better balanced workload, or to identify clinicians that are overloaded</p>
+</section>
+<section id="informant-recommendations" class="slide level2">
+<h2>Informant Recommendations</h2>
+</section>
+<section id="hypotheses" class="slide level2">
+<h2>Hypotheses</h2>
+<p>H^1 - Model Performance Hypothesis: Machine learning models will do a better job of predicting the hours a client might need per week than regression models.</p>
+<p>H2 - Feature Importance Hypothesis: Specific intake features, such as initial severity of symptoms and demographic factors, will be significant predictors of caseweight.</p>
+</section>
+<section id="how-will-we-know" class="slide level2">
+<h2>How will we know?</h2>
+<ul>
+<li class="fragment">We will use mae and rmse to evaluate all models</li>
+</ul>
+</section>
+<section id="model-interpretability" class="slide level2">
+<h2>Model Interpretability</h2>
+<ul>
+<li class="fragment"><p>Wang et al., suggested future work should investigate which indicators contributed most to the models, as well as why certain models showed better performance.</p></li>
+<li class="fragment"><p>Importance of indicators can be calculated using black box auditing techniques [25], and compared across different algorithms and different proxies.</p></li>
+<li class="fragment"><p>Interpretability of machine learning models have received increasing attention, and is particularly important in healthcare context in improving its transparency [26,27].</p></li>
+<li class="fragment"><p>Knowing which indicators were most helpful can also potentially decrease the number of indicators used in future models, which is beneficial to the ease of deployment.</p></li>
+</ul>
+</section>
+<section id="dependent-variable---caseweight" class="slide level2">
+<h2>Dependent Variable - Caseweight</h2>
+<p>Add characteristics of our outcome here</p>
+</section>
+<section id="independent-variables" class="slide level2">
+<h2>Independent Variables</h2>
+<ul>
+<li class="fragment">Screener scale scores</li>
+<li class="fragment">Screener items</li>
+<li class="fragment">Demographics Information</li>
+</ul>
+</section>
+<section id="predictor-selection" class="slide level2">
+<h2>Predictor Selection</h2>
+<ul>
+<li class="fragment">necessary that all items, scales and information is available at intake</li>
+</ul>
+</section>
+<section id="machine-learning" class="slide level2">
+<h2>Machine Learning</h2>
+
+<img data-src="images/Presenting Numerical Data Education Presentation in Blue Cream Yellow Bold Geometric Style (6).png" class="r-stretch"><aside class="notes">
+<p>So Machine Learning! What is it?</p>
+<p>Broadly, ML algorithms are a set of mathematical rules that look for relationships and patterns in data that can then be used to predict future relationships. When we use the term model, we are referring to an algorithm that has already been trained on a dataset to make specific predictions.</p>
+<p>In our case, as Nick outlined, we were interested in learning whether a machine learning model trained on client data, could usefully predict the caseweight of a new intake.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="model-building" class="slide level2">
+<h2>Model Building</h2>
+
+<img data-src="images/Presenting Numerical Data Education Presentation in Blue Cream Yellow Bold Geometric Style (3).png" class="r-stretch"></section>
+<section id="data-splitting" class="slide level2">
+<h2>Data Splitting</h2>
+
+<img data-src="images/Presenting Numerical Data Education Presentation in Blue Cream Yellow Bold Geometric Style (7)-01.png" class="r-stretch"></section>
+<section id="cross-validation" class="slide level2">
+<h2>Cross Validation</h2>
+
+<img data-src="images/Presenting Numerical Data Education Presentation in Blue Cream Yellow Bold Geometric Style (5)-01.png" class="r-stretch"></section>
+<section id="model-flow" class="slide level2">
+<h2>Model Flow</h2>
+
+<img data-src="images/Presenting Numerical Data Education Presentation in Blue Cream Yellow Bold Geometric Style.png" class="r-stretch"></section>
+<section id="plan" class="slide level2">
+<h2>Plan</h2>
+<div id="cell-fig-modelbuilding" class="cell">
+<div class="sourceCode cell-code hidden" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co">#| label: fig-modelbuilding</span></span>
+<span id="cb4-2"><a></a><span class="co">#| fig-width: 7</span></span>
+<span id="cb4-3"><a></a><span class="co">#| echo: false</span></span>
+<span id="cb4-4"><a></a><span class="co">#| fig-cap: |</span></span>
+<span id="cb4-5"><a></a><span class="co">#|   Indicators of Caseweight Modelling Proxy of Caseweight</span></span>
+<span id="cb4-6"><a></a></span>
+<span id="cb4-7"><a></a>DiagrammeR<span class="sc">::</span><span class="fu">grViz</span>(<span class="st">"digraph G {</span></span>
+<span id="cb4-8"><a></a></span>
+<span id="cb4-9"><a></a><span class="st">  rankdir = LR;</span></span>
+<span id="cb4-10"><a></a><span class="st">  size='7,5'; ratio=fill; node[fontsize=24]; </span></span>
+<span id="cb4-11"><a></a><span class="st"> </span></span>
+<span id="cb4-12"><a></a><span class="st">  subgraph cluster_0 {</span></span>
+<span id="cb4-13"><a></a><span class="st">    style=filled;</span></span>
+<span id="cb4-14"><a></a><span class="st">    color=lightgrey;</span></span>
+<span id="cb4-15"><a></a><span class="st">    node [style=filled,color=white, fontsize=24, shape=circle];</span></span>
+<span id="cb4-16"><a></a><span class="st">    x1[label = 'x@_{1}'] x2[label = 'x@_{2}'] x3[label = 'x@_{...}'] x4[label = 'x@_{n}'];</span></span>
+<span id="cb4-17"><a></a><span class="st">    label = 'Indicators of Caseweight'</span></span>
+<span id="cb4-18"><a></a><span class="st">  }</span></span>
+<span id="cb4-19"><a></a><span class="st">  </span></span>
+<span id="cb4-20"><a></a><span class="st">  model[shape=square, style=filled, color='.7 .3 1.0', fontsize=24, fontcolor=White];</span></span>
+<span id="cb4-21"><a></a></span>
+<span id="cb4-22"><a></a><span class="st">  subgraph cluster_1 {</span></span>
+<span id="cb4-23"><a></a><span class="st">    node [style=filled, fontsize=24,height=.5];</span></span>
+<span id="cb4-24"><a></a><span class="st">    y1[label = 'y@^{p}', shape=circle];</span></span>
+<span id="cb4-25"><a></a><span class="st">    label = 'Caseweight Proxy';</span></span>
+<span id="cb4-26"><a></a><span class="st">    color=invis;</span></span>
+<span id="cb4-27"><a></a></span>
+<span id="cb4-28"><a></a><span class="st">  }</span></span>
+<span id="cb4-29"><a></a><span class="st">  </span></span>
+<span id="cb4-30"><a></a><span class="st">    subgraph cluster_2 {</span></span>
+<span id="cb4-31"><a></a><span class="st">    node [style=filled, fontsize=24,height=.5];</span></span>
+<span id="cb4-32"><a></a><span class="st">    y2[label = 'y', shape=circle];</span></span>
+<span id="cb4-33"><a></a><span class="st">    label = 'Actual Caseweight';</span></span>
+<span id="cb4-34"><a></a><span class="st">    color=invis;</span></span>
+<span id="cb4-35"><a></a><span class="st">    lheight=6</span></span>
+<span id="cb4-36"><a></a></span>
+<span id="cb4-37"><a></a><span class="st">  }</span></span>
+<span id="cb4-38"><a></a></span>
+<span id="cb4-39"><a></a><span class="st">  x1 -&gt; model [arrowsize=0.5];</span></span>
+<span id="cb4-40"><a></a><span class="st">  x2 -&gt; model [arrowsize=0.5];</span></span>
+<span id="cb4-41"><a></a><span class="st">  x3 -&gt; model [arrowsize=0.5];</span></span>
+<span id="cb4-42"><a></a><span class="st">  x4 -&gt; model [arrowsize=0.5];</span></span>
+<span id="cb4-43"><a></a><span class="st">  model -&gt; y1 [arrowsize=0.5];</span></span>
+<span id="cb4-44"><a></a><span class="st">  </span></span>
+<span id="cb4-45"><a></a><span class="st">  y1 -&gt; y2 [style=dotted, arrowhead=none];</span></span>
+<span id="cb4-46"><a></a><span class="st">  </span></span>
+<span id="cb4-47"><a></a></span>
+<span id="cb4-48"><a></a></span>
+<span id="cb4-49"><a></a><span class="st">}"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-modelbuilding" class="cell-output-display quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-modelbuilding-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="grViz html-widget html-fill-item" id="htmlwidget-86c2969ba72b6d2fe9ff" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-86c2969ba72b6d2fe9ff">{"x":{"diagram":"digraph G {\n\n  rankdir = LR;\n  size=\"7,5\"; ratio=fill; node[fontsize=24]; \n \n  subgraph cluster_0 {\n    style=filled;\n    color=lightgrey;\n    node [style=filled,color=white, fontsize=24, shape=circle];\n    x1[label = <x<FONT POINT-SIZE=\"8\"><SUB>1<\/SUB><\/FONT>>] x2[label = <x<FONT POINT-SIZE=\"8\"><SUB>2<\/SUB><\/FONT>>] x3[label = <x<FONT POINT-SIZE=\"8\"><SUB>...<\/SUB><\/FONT>>] x4[label = <x<FONT POINT-SIZE=\"8\"><SUB>n<\/SUB><\/FONT>>];\n    label = \"Indicators of Caseweight\"\n  }\n  \n  model[shape=square, style=filled, color=\".7 .3 1.0\", fontsize=24, fontcolor=White];\n\n  subgraph cluster_1 {\n    node [style=filled, fontsize=24,height=.5];\n    y1[label = <y<FONT POINT-SIZE=\"8\"><SUP>p<\/SUP><\/FONT>>, shape=circle];\n    label = \"Caseweight Proxy\";\n    color=invis;\n\n  }\n  \n    subgraph cluster_2 {\n    node [style=filled, fontsize=24,height=.5];\n    y2[label = \"y\", shape=circle];\n    label = \"Actual Caseweight\";\n    color=invis;\n    lheight=6\n\n  }\n\n  x1 -> model [arrowsize=0.5];\n  x2 -> model [arrowsize=0.5];\n  x3 -> model [arrowsize=0.5];\n  x4 -> model [arrowsize=0.5];\n  model -> y1 [arrowsize=0.5];\n  \n  y1 -> y2 [style=dotted, arrowhead=none];\n  \n\n\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modelbuilding-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Indicators of Caseweight Modelling Proxy of Caseweight
+</figcaption>
+</figure>
+</div>
+</div>
+<aside class="notes">
+<p>Our vision for the caseweight model is to use the client’s most recent clinical assessment data and information on their past service utilization to predict using our algorithm or model how much direct time (on average) that client is expected to require per week.</p>
+<p>We can see for any given worker how much of their time is currently being spent doing direct client care. If they are below a certain threshold then we can assign clients in a manner that will keep a balanced workload and hopefully ensure they have capacity to support these clients. There are of course linguistic, cultural, and clinical factors managers will have to match during assignment as well.</p>
+<p>But our aim is to give clinical leaders the evidence they need to make informed decisions about case assignments.</p>
+<p>This is where machine learning has its benefits. It can help us distill and make sense of highly complex non-linear systems.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="algorithm-fairness" class="slide level2">
+<h2>Algorithm Fairness</h2>
+<p>Machine learning is being used in the child and youth mental health sector in Ontario but it is in many ways in its infancy.</p>
+<p>We are still far away from implementation and as we progress implementation actually gets further away. One of the major areas of work we need to do is around algorithm fairness. We need examine the relationship between demographic groups and the model’s variables, outcomes, and the potential decisions.</p>
+</section>
+<section id="interpretability" class="slide level2">
+<h2>Interpretability</h2>
+<p>Another important piece of work is around model interpretability and awareness. Some machine learning models can be relatively simple to understand like a decision tree, it is easy to see visually what variables resulted in the predicted intensity. However, models like a random forest can become more opaque and difficult to understand – we might be able to provide partial explanations but it wouldn’t be reasonable to expect an analyst let alone a clinician to understand the specific reasons why one prediction differs from another.</p>
+</section>
+<section id="algorithm-governance" class="slide level2">
+<h2>Algorithm Governance</h2>
+<p>And while I’ve said machine learning in the CYMH sector in Ontario is in many ways in its infancy– algorithms are not new. Many organizations are using algorithm and may not realize it, which is itself a challenge and risk.</p>
+<p>Over the past two decades there has been an explosion of work examining algorithm governance, implementation, and auditing. There are countless resources out there now for organizations to use to audit, assess, and implement algorithms. However, to my knowledge that work has not made its way into our sector in a major way.</p>
+<p>For example, some of the standardize assessment tools currently available have scores that are calculated using algorithms that were developed with machine learning methods such as interactive tree builders. However, in my experience these algorithms do not have a substantive body of work conceptualizing or assessing fairness. They also do not appear to undergo auditing. I’ve not heard of agencies doing algorithm impact assessments either. The idea is that prior to implementing or using an algorithm that provides some type of score or informs decision making we should be doing our due diligence.</p>
+<p>Has the algorithm been assessed for fairness? How interpretable and understandable is the algorithm? How was the algorithm developed? What does it actually predict? How will we actually use it? What are the expected impacts of the algorithm? What safeguards do we have in place to identify harm?</p>
+<p>This is can be challenging and time consuming. I believe we are at a time where we need to as individual organizations and a sector start asking and planning for these questions AND If we already are using algorithms to inform decision making we should be going back and reviewing these questions. We may in good faith trust tool developers and vendors, however, their context is different. Developing an algorithm as a research project is different from implementing one that can have material impacts on a family.</p>
+</section>
+<section id="refs" class="slide level2">
+<h2>Refs</h2>
+<p>Caseload guidelines working group (2019). Developing caseload/workload guidelines for Ontario’s child and youth mental health sector. Ottawa, ON: Ontario Centre of Excellence for Child and Youth Mental Health. Collins, G. S., Dhiman, P., Ma, J., Schlussel, M. M., Archer, L., Van Calster, B., Harrell, F. E., Martin, G. P., Moons, K. G. M., van Smeden, M., Sperrin, M., Bullock, G. S., &amp; Riley, R. D. (2024). Evaluation of clinical prediction models (part 1): From development to external validation. BMJ, e074819. https://doi.org/10.1136/bmj-2023-074819 Johnson, N., Moharana, S., Harrington, C., Andalibi, N., Heidari, H., &amp; Eslami, M. (2024). The fall of an algorithm: Characterizing the dynamics toward abandonment. Proceedings of the 2024 ACM Conference on Fairness, Accountability, and Transparency, 337–358. https://doi.org/10.1145/3630106.3658910 Martin, P., Davies, R., Macdougall, A., Ritchie, B., Vostanis, P., Whale, A., &amp; Wolpert, M. (2017). Developing a case mix classification for child and adolescent mental health services: The influence of presenting problems, complexity factors and service providers on number of appointments.&nbsp; Journal of Mental Health,&nbsp;29(4), 431–438. https://doi.org/10.1080/09638237.2017.1370631 Raji, I. D., Smart, A., White, R. N., Mitchell, M., Gebru, T., Hutchinson, B., Smith-Loud, J., Theron, D., &amp; Barnes, P. (2020). Closing the AI accountability gap: Defining an end-to-end framework for internal algorithmic auditing. Proceedings of the 2020 Conference on Fairness, Accountability, and Transparency, 33–44. https://doi.org/10.1145/3351095.3372873 Tran, N., Poss, J. W., Perlman, C., &amp; Hirdes, J. P. (2019). Case-mix classification for mental health care in community settings: A scoping review. Health Services Insights, 12, 1178632919862248. https://doi.org/10.1177/1178632919862248</p>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
