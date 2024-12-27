@@ -67,8 +67,6 @@ floatsintext: true
 keywords: [workload, caseload, case management, data science, machine learning, organizational psychology]
 bibliography: bibliography.bib
 link-citations: true
-project:
-  execute-dir: project
 format:
   apaquarto-html:
       comments:
@@ -280,7 +278,7 @@ apa <- function(x, title = " ") {
 }
 
 
-table <- read_excel("Predictors.xlsx")
+table <- read_excel("C:/Users/Shauna/Documents/DataScience/Prospectus/Predictors.xlsx")
 table |>apa()
 
 ```
